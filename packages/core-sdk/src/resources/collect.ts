@@ -1,17 +1,17 @@
-import { AxiosInstance } from "axios";
-import { ContractTransaction, Signer } from "ethers";
+import {AxiosInstance} from "axios";
 
-import { CollectIPAssetRequest, CollectIPAssetResponse } from "../types/resources/collect";
-import { CollectModule } from "../abi/generated";
-import { handleError } from "../utils/errors";
-import { CollectReadOnlyClient } from "./collectReadOnly";
+import {CollectIPAssetRequest, CollectIPAssetResponse} from "../types/resources/collect";
+import {handleError} from "../utils/errors";
+import {CollectReadOnlyClient} from "./collectReadOnly";
+import {getAddress, PublicClient, WalletClient} from "viem";
+import {collectModuleConfig} from "../abi/collectModule.abi";
 
 export class CollectClient extends CollectReadOnlyClient {
-  private readonly signer: Signer;
+  protected readonly wallet : WalletClient;
 
-  constructor(httpClient: AxiosInstance, signer: Signer, collectModule: CollectModule) {
-    super(httpClient, collectModule);
-    this.signer = signer;
+  constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet : WalletClient) {
+    super(httpClient, rpcClient);
+    this.wallet = wallet;
   }
 
   /**
@@ -22,17 +22,23 @@ export class CollectClient extends CollectReadOnlyClient {
    */
   public async collect(request: CollectIPAssetRequest): Promise<CollectIPAssetResponse> {
     try {
-      const response: ContractTransaction = await this.collectModuleContract.collect({
-        franchiseId: request.franchiseId,
-        ipAssetId: request.ipAssetId,
-        collector: request.collector,
-        collectData: "0x",
-        collectNFTInitData: "0x",
-        collectNFTData: "0x",
-      });
+      const {request: call} = await this.rpcClient.simulateContract({
+        ...collectModuleConfig,
+        functionName: "collect",
+        args: [
+          {
+            franchiseId: request.franchiseId,
+            ipAssetId: request.ipAssetId,
+            collector: getAddress(request.collector),
+            collectData: "0x",
+            collectNFTInitData: "0x",
+            collectNFTData: "0x",
+          }
+        ]
+      })
 
       return {
-        txHash: response.hash,
+        txHash: await this.wallet.writeContract(call),
       };
     } catch (error: unknown) {
       handleError(error, "Failed to collect IP Asset");

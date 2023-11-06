@@ -2,8 +2,10 @@ import { Client } from "../../src/types/client";
 import chai, { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { StoryClient, StoryConfig, Environment } from "../../src/index";
-import { ethers } from "ethers";
 import * as dotenv from "dotenv";
+import {fantom} from "viem/chains";
+import {getAddress, http} from "viem";
+import {privateKeyToAccount} from "viem/accounts";
 
 dotenv.config();
 chai.use(chaiAsPromised);
@@ -12,12 +14,11 @@ describe("Franchise Functions", () => {
   let client: Client;
 
   before(function () {
-    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_PROVIDER_URL);
-    const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY as string, provider);
-
     const config: StoryConfig = {
       environment: Environment.TEST,
-      signer: wallet,
+      chain: fantom,
+      transport: http(process.env.RPC_PROVIDER_URL),
+      account: privateKeyToAccount(getAddress(process.env.WALLET_PRIVATE_KEY || '')),
     };
 
     client = StoryClient.newClient(config);
@@ -48,7 +49,7 @@ describe("Franchise Functions", () => {
     it("should not throw error when configuring a franchise", async () => {
       await expect(
         client.franchise.configure({
-          franchiseId: "78",
+          franchiseId: 78n,
         }),
       ).to.not.be.rejected;
     });

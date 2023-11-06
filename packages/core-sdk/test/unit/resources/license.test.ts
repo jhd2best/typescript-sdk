@@ -1,12 +1,9 @@
 import chai, { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { LicenseClient } from "../../../src/resources/license";
-import { FranchiseRegistry } from "../../../src/abi/generated/FranchiseRegistry";
 import { AxiosInstance } from "axios";
 import { createMock } from "../testUtils";
 import * as sinon from "sinon";
-import { Wallet } from "ethers";
-import { IpAssetRegistry__factory } from "../../../src/abi/generated";
 
 chai.use(chaiAsPromised);
 
@@ -45,8 +42,8 @@ describe("Test LicenseClient", function () {
           createLicense: createLicenseStub,
         } as any);
 
-        const franchiseId = "123";
-        const ipAssetId = "456";
+        const franchiseId = 123n;
+        const ipAssetId = 456n;
         const licenseURI = "https://example.com/license";
 
         const response = await licenseClient.create({
@@ -83,8 +80,8 @@ describe("Test LicenseClient", function () {
         createLicense: createLicenseStub,
       } as any);
 
-      const franchiseId = "123";
-      const ipAssetId = "456";
+      const franchiseId = 123n;
+      const ipAssetId = 456n;
       const licenseURI = "https://example.com/license";
 
       await expect(

@@ -1,27 +1,28 @@
-import { AxiosInstance } from "axios";
-import { constants } from "ethers";
+import {AxiosInstance} from "axios";
 
 import {
-  CreateFranchiseRequest,
-  CreateFranchiseResponse,
   ConfigureFranchiseRequest,
   ConfigureFranchiseResponse,
+  CreateFranchiseRequest,
+  CreateFranchiseResponse,
 } from "../types/resources/franchise";
-import { handleError } from "../utils/errors";
-import { FranchiseRegistry, LicensingModule } from "../abi/generated";
-import { FranchiseReadOnlyClient } from "./franchiseReadOnly";
+import {handleError} from "../utils/errors";
+import {FranchiseReadOnlyClient} from "./franchiseReadOnly";
+import {PublicClient, WalletClient} from "viem";
+import {franchiseRegistryConfig} from "../abi/franchiseRegistry.abi";
+import {licensingModuleConfig} from "../abi/licensingModule.abi";
+import {AddressZero} from "../constants/addresses";
 
 /**
  * FranchiseClient allows you to create, update, view, search franchises on
  * Story Protocol.
  */
 export class FranchiseClient extends FranchiseReadOnlyClient {
-  constructor(
-    httpClient: AxiosInstance,
-    franchiseRegistry: FranchiseRegistry,
-    licenseModule: LicensingModule,
-  ) {
-    super(httpClient, franchiseRegistry, licenseModule);
+  protected readonly wallet : WalletClient;
+
+  constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet : WalletClient) {
+    super(httpClient, rpcClient);
+    this.wallet = wallet;
   }
 
   /**
@@ -35,15 +36,19 @@ export class FranchiseClient extends FranchiseReadOnlyClient {
       // hardcoded the URI for now until the backend API for uploading franchise metadata is ready
       const tokenURI = "https://arweave.net/dnFJl1v8kgOx_6Z0gEsBce3D56cMP4-lxAcFqSsL0_w";
 
-      const response = await this.franchiseRegistry.registerFranchise({
-        name: request.franchiseName,
-        symbol: request.franchiseSymbol,
-        description: request.franchiseDescription,
-        tokenURI: tokenURI,
-      });
+      const {request: call} = await this.rpcClient.simulateContract({
+        ...franchiseRegistryConfig,
+        functionName: "registerFranchise",
+        args: [{
+          name: request.franchiseName,
+          symbol: request.franchiseSymbol,
+          description: request.franchiseDescription,
+          tokenURI: tokenURI,
+        }]
+      })
 
       return {
-        txHash: response.hash,
+        txHash: await this.wallet.writeContract(call),
       };
     } catch (error: unknown) {
       handleError(error, "Failed to create franchise");
@@ -58,30 +63,34 @@ export class FranchiseClient extends FranchiseReadOnlyClient {
    */
   public async configure(request: ConfigureFranchiseRequest): Promise<ConfigureFranchiseResponse> {
     try {
-      const response = await this.licenseModule.configureFranchiseLicensing(request.franchiseId, {
-        nonCommercialConfig: {
-          canSublicense: true,
-          franchiseRootLicenseId: 0,
-        },
-        nonCommercialTerms: {
-          processor: constants.AddressZero,
-          data: [],
-        },
-        commercialConfig: {
-          canSublicense: false,
-          franchiseRootLicenseId: 0,
-        },
-        commercialTerms: {
-          processor: constants.AddressZero,
-          data: [],
-        },
-        commercialLicenseUri: "aaaa",
-        rootIpAssetHasCommercialRights: false,
-        revoker: "0xF33f05489d9708C2CA97944F2007d4E741D4DEe7",
-      });
+      const {request: call} = await this.rpcClient.simulateContract({
+        ...licensingModuleConfig,
+        functionName: "configureFranchiseLicensing",
+        args: [request.franchiseId,{
+          nonCommercialConfig: {
+            canSublicense: true,
+            franchiseRootLicenseId: 0n,
+          },
+          nonCommercialTerms: {
+            processor: AddressZero,
+            data: "0x",
+          },
+          commercialConfig: {
+            canSublicense: false,
+            franchiseRootLicenseId: 0n,
+          },
+          commercialTerms: {
+            processor: AddressZero,
+            data: "0x",
+          },
+          commercialLicenseUri: "aaaa",
+          rootIpAssetHasCommercialRights: false,
+          revoker: "0xF33f05489d9708C2CA97944F2007d4E741D4DEe7",
+        }]
+      })
 
       return {
-        txHash: response.hash,
+        txHash: await this.wallet.writeContract(call),
       };
     } catch (error: unknown) {
       handleError(error, "Failed to configure franchise");

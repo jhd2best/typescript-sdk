@@ -1,13 +1,9 @@
 import chai, { expect } from "chai";
 import { RelationshipClient } from "../../../src/resources/relationship";
-import { RelationshipModule } from "../../../src/abi/generated/RelationshipModule";
 import { createMock } from "../testUtils";
 import * as sinon from "sinon";
 
 import chaiAsPromised from "chai-as-promised";
-import { handleError } from "../../../src/utils/errors";
-import { FranchiseRegistry } from "../../../src/abi/generated";
-import { ethers } from "ethers";
 
 chai.use(chaiAsPromised);
 
@@ -31,14 +27,14 @@ describe("Test RelationshipClient", function () {
   describe("test getRegistryAddresses", () => {
     const mockRelateRequest = {
       sourceIPAsset: {
-        franchiseId: "6",
-        ipAssetId: "1",
+        franchiseId: 6n,
+        ipAssetId: 1n,
       },
       destIPAsset: {
-        franchiseId: "6",
-        ipAssetId: "2",
+        franchiseId: 6n,
+        ipAssetId: 2n,
       },
-      ttl: "123",
+      ttl: 123n,
     };
 
     it("should resolve with the registry addresses", async () => {
@@ -67,9 +63,9 @@ describe("Test RelationshipClient", function () {
         relateSpy.calledWith(
           {
             sourceContract: "0x00000000000000000000000000000000000000001",
-            sourceId: "1",
+            sourceId: 1n,
             destContract: "0x00000000000000000000000000000000000000002",
-            destId: "2",
+            destId: 2n,
             relationshipId: "0x472511bc397e46b55b56292ba067168f2f5ceb640570883cadf0daafda894c1d",
             ttl: "0",
           },
@@ -94,14 +90,14 @@ describe("Test RelationshipClient", function () {
   describe("Test RelationshipClient.relate", function () {
     const mockRelateRequest = {
       sourceIPAsset: {
-        franchiseId: "6",
-        ipAssetId: "1",
+        franchiseId: 6n,
+        ipAssetId: 1n,
       },
       destIPAsset: {
-        franchiseId: "6",
-        ipAssetId: "2",
+        franchiseId: 6n,
+        ipAssetId: 2n,
       },
-      ttl: "123",
+      ttl: 123n,
     };
 
     const mockResponse = {
@@ -145,14 +141,14 @@ describe("Test RelationshipClient", function () {
   describe("Test RelationshipClient.unrelate", function () {
     const mockUnrelateRequest = {
       sourceIPAsset: {
-        franchiseId: "6",
-        ipAssetId: "1",
+        franchiseId: 6n,
+        ipAssetId: 1n,
       },
       destIPAsset: {
-        franchiseId: "6",
-        ipAssetId: "2",
+        franchiseId: 6n,
+        ipAssetId: 2n,
       },
-      ttl: "123",
+      ttl: 123n,
     };
     const mockResponse = {
       hash: "transactionHash",
@@ -190,14 +186,14 @@ describe("Test RelationshipClient", function () {
   describe("Test RelationshipClient.isRelationshipExpired", function () {
     const mockIsRelationshipExpiredRequest = {
       sourceIPAsset: {
-        franchiseId: "6",
-        ipAssetId: "1",
+        franchiseId: 6n,
+        ipAssetId: 1n,
       },
       destIPAsset: {
-        franchiseId: "6",
-        ipAssetId: "2",
+        franchiseId: 6n,
+        ipAssetId: 2n,
       },
-      ttl: "123",
+      ttl: 123n,
     };
 
     it("should check if relationship is expired and return result", async function () {
@@ -237,14 +233,14 @@ describe("Test RelationshipClient", function () {
   describe("Test RelationshipClient.isRelated", function () {
     const mockIsRelatedRequest = {
       sourceIPAsset: {
-        franchiseId: "6",
-        ipAssetId: "1",
+        franchiseId: 6n,
+        ipAssetId: 1n,
       },
       destIPAsset: {
-        franchiseId: "6",
-        ipAssetId: "2",
+        franchiseId: 6n,
+        ipAssetId: 2n,
       },
-      ttl: "123",
+      ttl: 123n,
     };
 
     it("should check if two entities are related and return result", async function () {

@@ -1,14 +1,14 @@
-import { AxiosInstance, AxiosResponse } from "axios";
+import {AxiosInstance, AxiosResponse} from "axios";
 
 import {
   GetLicenseRequest,
   GetLicenseResponse,
-  ListLicenseResponse,
   ListLicenseRequest,
+  ListLicenseResponse,
 } from "../types/resources/license";
-import { FranchiseRegistry } from "../abi/generated";
-import { handleError } from "../utils/errors";
-import { isIntegerString } from "../utils/utils";
+import {handleError} from "../utils/errors";
+import {isIntegerString} from "../utils/utils";
+import {PublicClient} from "viem";
 
 /**
  * A class representing License operations.
@@ -17,11 +17,14 @@ import { isIntegerString } from "../utils/utils";
  */
 export class LicenseReadOnlyClient {
   protected readonly httpClient: AxiosInstance;
-  protected readonly franchiseRegistry: FranchiseRegistry;
+  protected readonly rpcClient: PublicClient;
 
-  constructor(httpClient: AxiosInstance, franchiseRegistry: FranchiseRegistry) {
+  constructor(
+      httpClient: AxiosInstance,
+      rpcClient: PublicClient,
+  ) {
     this.httpClient = httpClient;
-    this.franchiseRegistry = franchiseRegistry;
+    this.rpcClient = rpcClient;
   }
 
   /**

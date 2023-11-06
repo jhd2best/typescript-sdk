@@ -1,9 +1,7 @@
 import { AxiosInstance } from "axios";
 import * as sinon from "sinon";
 import { CollectClient } from "../../../src/resources/collect";
-import { CollectModule } from "../../../src/abi/generated/CollectModule";
 import { createMock } from "../testUtils";
-import { Signer } from "ethers";
 import chai from "chai";
 import { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
@@ -35,8 +33,8 @@ describe("Test CollectClient", function () {
       });
 
       const response = await collectClient.collect({
-        franchiseId: "6",
-        ipAssetId: "1",
+        franchiseId: 6n,
+        ipAssetId: 1n,
         collector: "0x1234567890123456789012345678901234567890",
       });
 
@@ -50,8 +48,8 @@ describe("Test CollectClient", function () {
 
       await expect(
         collectClient.collect({
-          franchiseId: "0",
-          ipAssetId: "0",
+          franchiseId: 0n,
+          ipAssetId: 0n,
           collector: "0x0000000000000000000000000000000000000000",
         }),
       ).to.be.rejectedWith("revert");

@@ -1,11 +1,8 @@
-import { AxiosInstance, AxiosResponse } from "axios";
+import {AxiosInstance, AxiosResponse} from "axios";
 
-import { handleError } from "../utils/errors";
-import {
-  GetTransactionRequest,
-  GetTransactionResponse,
-  ListTransactionResponse,
-} from "../types/resources/transaction";
+import {handleError} from "../utils/errors";
+import {GetTransactionRequest, GetTransactionResponse, ListTransactionResponse,} from "../types/resources/transaction";
+import {PublicClient} from "viem";
 
 /**
  * TransactionClient allows you to view and monitor transactions on
@@ -13,9 +10,14 @@ import {
  */
 export class TransactionReadOnlyClient {
   protected readonly httpClient: AxiosInstance;
+  protected readonly rpcClient: PublicClient;
 
-  constructor(httpClient: AxiosInstance) {
+  constructor(
+      httpClient: AxiosInstance,
+      rpcClient: PublicClient,
+  ) {
     this.httpClient = httpClient;
+    this.rpcClient = rpcClient;
   }
 
   /**

@@ -1,4 +1,4 @@
-import { IPAssetType } from "../../enums/IPAssetType";
+import {IPAssetType} from "../../enums/IPAssetType";
 
 /**
  * Core data model for IP Asset.
@@ -40,13 +40,13 @@ export type GetIpAssetResponse = {
  * @public
  */
 export type CreateIpAssetRequest = {
-  franchiseId: string;
+  franchiseId: bigint;
   ipAssetType: IPAssetType;
   ipAssetName: string;
   description: string;
   mediaUrl: string;
   to: string;
-  parentIpAssetId: string;
+  parentIpAssetId: bigint;
 };
 
 /**

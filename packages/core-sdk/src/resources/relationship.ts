@@ -1,6 +1,3 @@
-import { ethers } from "ethers";
-
-import { RelationshipModule } from "../abi/generated/RelationshipModule";
 import {
   RelationshipIsRelatedRequest,
   RelationshipIsRelatedResponse,
@@ -11,21 +8,22 @@ import {
   RelationshipUnrelateRequest,
   RelationshipUnrelateResponse,
 } from "../types/resources/relationship";
-import { handleError } from "../utils/errors";
-import { FranchiseRegistry } from "../abi/generated";
-import { RelationshipReadOnlyClient } from "./relationshipReadOnly";
+import {handleError} from "../utils/errors";
+import {RelationshipReadOnlyClient} from "./relationshipReadOnly";
+import {Address, PublicClient, stringToHex, WalletClient} from "viem";
+import {AxiosInstance} from "axios";
+import {franchiseRegistryConfig} from "../abi/franchiseRegistry.abi";
+import {relationshipModuleConfig} from "../abi/relationshipModule.abi";
 
 /**
  * Client for managing relationships.
  */
 export class RelationshipClient extends RelationshipReadOnlyClient {
-  /**
-   * Creates a new RelationshipClient instance.
-   * @param relationshipModule - The relationship module to interact with.
-   * @param franchiseRegistry - The franchise registry to interact with.
-   */
-  constructor(relationshipModule: RelationshipModule, franchiseRegistry: FranchiseRegistry) {
-    super(relationshipModule, franchiseRegistry);
+  protected readonly wallet : WalletClient;
+
+  constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet : WalletClient) {
+    super(httpClient, rpcClient);
+    this.wallet = wallet;
   }
 
   /**
@@ -35,19 +33,24 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
    * @returns An object containing the source and destination IP registry addresses.
    */
   private async getRegistryAddresses(
-    sourceFranchiseId: string,
-    destFranchiseId: string,
+    sourceFranchiseId: bigint,
+    destFranchiseId: bigint,
   ): Promise<{
-    sourceIpRegistryAddress: string;
-    destIpRegistryAddress: string;
+    sourceIpRegistryAddress: Address;
+    destIpRegistryAddress: Address;
   }> {
     try {
-      const sourceIpRegistryAddress: string = await this.franchiseRegistry.ipAssetRegistryForId(
-        sourceFranchiseId,
-      );
-      const destIpRegistryAddress: string = await this.franchiseRegistry.ipAssetRegistryForId(
-        destFranchiseId,
-      );
+      const sourceIpRegistryAddress = await this.rpcClient.readContract({
+        ...franchiseRegistryConfig,
+        functionName: "ipAssetRegistryForId",
+        args: [sourceFranchiseId]
+      })
+
+      const destIpRegistryAddress = await this.rpcClient.readContract({
+        ...franchiseRegistryConfig,
+        functionName: "ipAssetRegistryForId",
+        args: [destFranchiseId]
+      })
 
       return {
         sourceIpRegistryAddress,
@@ -67,7 +70,7 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
     try {
       const { sourceIPAsset, destIPAsset } = request;
 
-      const mockRelationshipData = ethers.utils.formatBytes32String("");
+      const mockRelationshipData = stringToHex("");
 
       // Get IPAssetRegistry Contract Address
       const { sourceIpRegistryAddress, destIpRegistryAddress } = await this.getRegistryAddresses(
@@ -75,7 +78,11 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
         destIPAsset.franchiseId,
       );
 
-      const relationshipId = await this.relationshipModule.getRelationshipId("APPEARS_IN");
+      const relationshipId = await this.rpcClient.readContract({
+        ...relationshipModuleConfig,
+        functionName: "getRelationshipId",
+        args: ["APPEARS_IN"]
+      })
 
       const params = {
         sourceContract: sourceIpRegistryAddress,
@@ -83,13 +90,17 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
         destContract: destIpRegistryAddress,
         destId: destIPAsset.ipAssetId,
         relationshipId,
-        ttl: "0",
+        ttl: 0n,
       };
 
-      const response = await this.relationshipModule.relate(params, mockRelationshipData);
+      const {request: call} = await this.rpcClient.simulateContract({
+        ...relationshipModuleConfig,
+        functionName: "relate",
+        args: [params, mockRelationshipData]
+      })
 
       return {
-        txHash: response.hash,
+        txHash: await this.wallet.writeContract(call),
       };
     } catch (error) {
       handleError(error, "Failed to create relationship");
@@ -113,7 +124,11 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
         destIPAsset.franchiseId,
       );
 
-      const relationshipId = await this.relationshipModule.getRelationshipId("APPEARS_IN");
+      const relationshipId = await this.rpcClient.readContract({
+        ...relationshipModuleConfig,
+        functionName: "getRelationshipId",
+        args: ["APPEARS_IN"]
+      })
 
       const params = {
         sourceContract: sourceIpRegistryAddress,
@@ -121,13 +136,17 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
         destContract: destIpRegistryAddress,
         destId: destIPAsset.ipAssetId,
         relationshipId,
-        ttl: "0",
+        ttl: 0n,
       };
 
-      const response = await this.relationshipModule.unrelate(params);
+      const {request: call} = await this.rpcClient.simulateContract({
+        ...relationshipModuleConfig,
+        functionName: "unrelate",
+        args: [params]
+      })
 
       return {
-        txHash: response.hash,
+        txHash: await this.wallet.writeContract(call),
       };
     } catch (error) {
       handleError(error, "Failed to unrelate relationship");
@@ -151,7 +170,11 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
         destIPAsset.franchiseId,
       );
 
-      const relationshipId = await this.relationshipModule.getRelationshipId("APPEARS_IN");
+      const relationshipId = await this.rpcClient.readContract({
+        ...relationshipModuleConfig,
+        functionName: "getRelationshipId",
+        args: ["APPEARS_IN"]
+      })
 
       const params = {
         sourceContract: sourceIpRegistryAddress,
@@ -159,10 +182,14 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
         destContract: destIpRegistryAddress,
         destId: destIPAsset.ipAssetId,
         relationshipId,
-        ttl: "0",
+        ttl: 0n,
       };
 
-      const response = await this.relationshipModule.isRelationshipExpired(params);
+      const response = await this.rpcClient.readContract({
+        ...relationshipModuleConfig,
+        functionName: "isRelationshipExpired",
+        args: [params]
+      })
 
       return {
         result: response,
@@ -189,7 +216,11 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
         destIPAsset.franchiseId,
       );
 
-      const relationshipId = await this.relationshipModule.getRelationshipId("APPEARS_IN");
+      const relationshipId = await this.rpcClient.readContract({
+        ...relationshipModuleConfig,
+        functionName: "getRelationshipId",
+        args: ["APPEARS_IN"]
+      })
 
       const params = {
         sourceContract: sourceIpRegistryAddress,
@@ -197,10 +228,14 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
         destContract: destIpRegistryAddress,
         destId: destIPAsset.ipAssetId,
         relationshipId,
-        ttl: "0",
+        ttl: 0n,
       };
 
-      const response = await this.relationshipModule.areTheyRelated(params);
+      const response = await this.rpcClient.readContract({
+        ...relationshipModuleConfig,
+        functionName: "areTheyRelated",
+        args: [params]
+      })
 
       return {
         result: response,

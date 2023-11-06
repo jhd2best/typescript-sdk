@@ -1,9 +1,11 @@
 import chai, { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { StoryClient, StoryConfig, Environment } from "../../src/index";
-import { ethers } from "ethers";
 import * as dotenv from "dotenv";
 import { Client } from "../../src/types/client";
+import {createPublicClient, getAddress, http} from "viem";
+import {fantom} from "viem/chains";
+import {privateKeyToAccount} from "viem/accounts";
 
 dotenv.config();
 chai.use(chaiAsPromised);
@@ -12,12 +14,11 @@ describe("Collect client integration tests", () => {
   let client: Client;
 
   beforeEach(function () {
-    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_PROVIDER_URL);
-    const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY as string, provider);
-
     const config: StoryConfig = {
       environment: Environment.TEST,
-      signer: wallet,
+      chain: fantom,
+      transport: http(process.env.RPC_PROVIDER_URL),
+      account: privateKeyToAccount(getAddress(process.env.WALLET_PRIVATE_KEY || '')),
     };
 
     client = StoryClient.newClient(config);
@@ -26,8 +27,8 @@ describe("Collect client integration tests", () => {
   describe("Collect an IP Asset", async function () {
     it("should return txHash when the collect transaction is successful", async () => {
       const response = await client.collect.collect({
-        franchiseId: "78",
-        ipAssetId: "1",
+        franchiseId: 78n,
+        ipAssetId: 1n,
         collector: "0xe17aA3E4BFe9812b64354e5275A211216F1dee2a",
       });
 

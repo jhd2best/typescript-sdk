@@ -1,28 +1,24 @@
-import axios, { AxiosInstance } from "axios";
-import { Signer, ethers } from "ethers";
-import { Provider } from "@ethersproject/providers";
+import axios, {AxiosInstance} from "axios";
+import {createPublicClient, createWalletClient, http, PublicClient, WalletClient} from 'viem'
+import {mainnet} from 'viem/chains'
 import * as dotenv from "dotenv";
 
-import { StoryConfig, StoryReadOnlyConfig } from "./types/config";
-import { Environment } from "./enums/Environment";
-import { FranchiseClient } from "./resources/franchise";
-import { FranchiseReadOnlyClient } from "./resources/franchiseReadOnly";
-import { RelationshipClient } from "./resources/relationship";
-import { RelationshipReadOnlyClient } from "./resources/relationshipReadOnly";
-import { IPAssetClient } from "./resources/ipAsset";
-import { IPAssetReadOnlyClient } from "./resources/ipAssetReadOnly";
-import { LicenseClient } from "./resources/license";
-import { LicenseReadOnlyClient } from "./resources/licenseReadOnly";
-import { TransactionClient } from "./resources/transaction";
-import { TransactionReadOnlyClient } from "./resources/transactionReadOnly";
-import { CollectClient } from "./resources/collect";
-import { CollectReadOnlyClient } from "./resources/collectReadOnly";
-import { HTTP_TIMEOUT } from "./constants/http";
-import { CollectModule__factory } from "./abi/generated";
-import { ReadOnlyClient, Client } from "./types/client";
-import { LicensingModule__factory } from "./abi/generated/factories/LicensingModule__factory";
-import { FranchiseRegistry__factory } from "./abi/generated/factories/FranchiseRegistry__factory";
-import { RelationshipModule__factory } from "./abi/generated/factories/RelationshipModule__factory";
+import {StoryConfig, StoryReadOnlyConfig} from "./types/config";
+import {Environment} from "./enums/Environment";
+import {FranchiseClient} from "./resources/franchise";
+import {FranchiseReadOnlyClient} from "./resources/franchiseReadOnly";
+import {RelationshipClient} from "./resources/relationship";
+import {RelationshipReadOnlyClient} from "./resources/relationshipReadOnly";
+import {IPAssetClient} from "./resources/ipAsset";
+import {IPAssetReadOnlyClient} from "./resources/ipAssetReadOnly";
+import {LicenseClient} from "./resources/license";
+import {LicenseReadOnlyClient} from "./resources/licenseReadOnly";
+import {TransactionClient} from "./resources/transaction";
+import {TransactionReadOnlyClient} from "./resources/transactionReadOnly";
+import {CollectClient} from "./resources/collect";
+import {CollectReadOnlyClient} from "./resources/collectReadOnly";
+import {HTTP_TIMEOUT} from "./constants/http";
+import {Client, ReadOnlyClient} from "./types/client";
 
 if (typeof process !== "undefined") {
   dotenv.config();
@@ -34,7 +30,8 @@ export class StoryClient {
   private readonly config: StoryConfig | StoryReadOnlyConfig;
   private readonly httpClient: AxiosInstance;
   private readonly isReadOnly: boolean = false;
-  private readonly signerOrProvider: Signer | Provider;
+  private readonly rpcClient: PublicClient;
+  private readonly wallet ?: WalletClient;
 
   private _franchise: FranchiseClient | FranchiseReadOnlyClient | null = null;
   private _license: LicenseClient | LicenseReadOnlyClient | null = null;
@@ -45,6 +42,7 @@ export class StoryClient {
 
   /**
    * @param config - the configuration for the SDK client
+   * @param isReadOnly
    */
   private constructor(config: StoryConfig | StoryReadOnlyConfig, isReadOnly: boolean = false) {
     if (config.environment !== Environment.TEST) {
@@ -54,9 +52,24 @@ export class StoryClient {
     this.config = config;
     this.isReadOnly = isReadOnly;
 
-    this.signerOrProvider = isReadOnly
-      ? (this.config as StoryReadOnlyConfig).provider || new ethers.providers.JsonRpcProvider()
-      : (this.config as StoryConfig).signer;
+    const clientConfig = {
+      chain: (this.config as StoryReadOnlyConfig).chain || mainnet,
+      transport: (this.config as StoryReadOnlyConfig).transport || http('https://cloudflare-eth.com')
+    }
+    this.rpcClient = createPublicClient(clientConfig)
+
+    if (!isReadOnly){
+      const account = (this.config as StoryConfig).account
+      if (!this.wallet) throw new Error("wallet is null")
+
+      this.wallet = createWalletClient({
+        chain: mainnet,
+        transport: http('https://cloudflare-eth.com'),
+        account: account
+      })
+    } else {
+      this.rpcClient = createPublicClient(clientConfig)
+    }
 
     this.httpClient = axios.create({
       baseURL: process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -83,127 +96,50 @@ export class StoryClient {
   }
 
   private initFranchise(): void {
-    const franchiseRegistryContract =
-      process.env.FRANCHISE_REGISTRY_CONTRACT ||
-      process.env.NEXT_PUBLIC_FRANCHISE_REGISTRY_CONTRACT;
-
-    const licenseModuleContract =
-      process.env.LICENSING_MODULE_CONTRACT || process.env.NEXT_PUBLIC_LICENSING_MODULE_CONTRACT;
-
-    const franchiseRegistry = FranchiseRegistry__factory.connect(
-      franchiseRegistryContract as string,
-      this.signerOrProvider,
-    );
-
-    const licenseModule = LicensingModule__factory.connect(
-      licenseModuleContract as string,
-      this.signerOrProvider,
-    );
-
     if (this.isReadOnly) {
-      this._franchise = new FranchiseReadOnlyClient(
-        this.httpClient,
-        franchiseRegistry,
-        licenseModule,
-      );
+      this._franchise = new FranchiseReadOnlyClient(this.httpClient, this.rpcClient);
     } else {
-      this._franchise = new FranchiseClient(this.httpClient, franchiseRegistry, licenseModule);
+      this._franchise = new FranchiseClient(this.httpClient, this.rpcClient, this.wallet!!);
     }
   }
 
   private initRelationship(): void {
-    const franchiseRegistryContract =
-      process.env.FRANCHISE_REGISTRY_CONTRACT ||
-      process.env.NEXT_PUBLIC_FRANCHISE_REGISTRY_CONTRACT;
-
-    const relationshipModuleContract =
-      process.env.RELATIONSHIP_MODULE_CONTRACT ||
-      process.env.NEXT_PUBLIC_RELATIONSHIP_MODULE_CONTRACT;
-
-    const franchiseRegistry = FranchiseRegistry__factory.connect(
-      franchiseRegistryContract as string,
-      this.signerOrProvider,
-    );
-
-    const relationshipModule = RelationshipModule__factory.connect(
-      relationshipModuleContract as string,
-      this.signerOrProvider,
-    );
-
     if (this.isReadOnly) {
-      this._relationship = new RelationshipReadOnlyClient(relationshipModule, franchiseRegistry);
+      this._relationship = new RelationshipReadOnlyClient(this.httpClient, this.rpcClient);
     } else {
-      this._relationship = new RelationshipClient(relationshipModule, franchiseRegistry);
+      this._relationship = new RelationshipClient(this.httpClient, this.rpcClient, this.wallet!!);
     }
   }
 
   private initIpAsset(): void {
-    const franchiseRegistryContract =
-      process.env.FRANCHISE_REGISTRY_CONTRACT ||
-      process.env.NEXT_PUBLIC_FRANCHISE_REGISTRY_CONTRACT;
-
-    const franchiseRegistry = FranchiseRegistry__factory.connect(
-      franchiseRegistryContract as string,
-      this.signerOrProvider,
-    );
-
     if (this.isReadOnly) {
-      this._ipAsset = new IPAssetReadOnlyClient(this.httpClient, franchiseRegistry);
+      this._ipAsset = new IPAssetReadOnlyClient(this.httpClient, this.rpcClient);
     } else {
-      this._ipAsset = new IPAssetClient(
-        this.httpClient,
-        franchiseRegistry,
-        this.signerOrProvider as Signer,
-      );
+      this._ipAsset = new IPAssetClient(this.httpClient, this.rpcClient, this.wallet!!);
     }
   }
 
   private initLicense(): void {
-    const franchiseRegistryContract =
-      process.env.FRANCHISE_REGISTRY_CONTRACT ||
-      process.env.NEXT_PUBLIC_FRANCHISE_REGISTRY_CONTRACT;
-
-    const franchiseRegistry = FranchiseRegistry__factory.connect(
-      franchiseRegistryContract as string,
-      this.signerOrProvider,
-    );
-
     if (this.isReadOnly) {
-      this._license = new LicenseReadOnlyClient(this.httpClient, franchiseRegistry);
+      this._license = new LicenseReadOnlyClient(this.httpClient, this.rpcClient);
     } else {
-      this._license = new LicenseClient(
-        this.httpClient,
-        this.signerOrProvider as Signer,
-        franchiseRegistry,
-      );
+      this._license = new LicenseClient(this.httpClient, this.rpcClient, this.wallet!!);
     }
   }
 
   private initTransaction(): void {
     if (this.isReadOnly) {
-      this._transaction = new TransactionReadOnlyClient(this.httpClient);
+      this._transaction = new TransactionReadOnlyClient(this.httpClient, this.rpcClient);
     } else {
-      this._transaction = new TransactionClient(this.httpClient);
+      this._transaction = new TransactionClient(this.httpClient, this.rpcClient, this.wallet!!);
     }
   }
 
   private initCollect(): void {
-    const collectModuleContract =
-      process.env.COLLECT_MODULE_CONTRACT || process.env.NEXT_PUBLIC_COLLECT_MODULE_CONTRACT;
-
-    const collectModule = CollectModule__factory.connect(
-      collectModuleContract as string,
-      this.signerOrProvider,
-    );
-
     if (this.isReadOnly) {
-      this._collect = new CollectReadOnlyClient(this.httpClient, collectModule);
+      this._collect = new CollectReadOnlyClient(this.httpClient, this.rpcClient);
     } else {
-      this._collect = new CollectClient(
-        this.httpClient,
-        this.signerOrProvider as Signer,
-        collectModule,
-      );
+      this._collect = new CollectClient(this.httpClient, this.rpcClient, this.wallet!!);
     }
   }
 

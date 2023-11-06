@@ -10,7 +10,7 @@ describe("Test StoryClient", function () {
       try {
         StoryClient.newClient({
           environment: Environment.PROD,
-          signer: Wallet.createRandom(),
+          account: Wallet.createRandom(),
         });
         expect.fail(`Function should not get here, it should throw an error `);
       } catch (error) {}
@@ -20,7 +20,7 @@ describe("Test StoryClient", function () {
       try {
         StoryClient.newClient({
           environment: Environment.TEST,
-          signer: Wallet.createRandom(),
+          account: Wallet.createRandom(),
         });
       } catch (error) {
         expect.fail(`Function should not have thrown any error, but it threw: ${error}`);
@@ -34,7 +34,7 @@ describe("Test StoryClient", function () {
     beforeEach(function () {
       client = StoryClient.newClient({
         environment: Environment.TEST,
-        signer: Wallet.createRandom(),
+        account: Wallet.createRandom(),
       });
     });
 

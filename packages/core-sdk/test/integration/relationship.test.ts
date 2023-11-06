@@ -28,7 +28,7 @@ describe("Relationship Functions", () => {
 
     const config: StoryConfig = {
       environment: Environment.TEST,
-      signer: wallet,
+      account: wallet,
     };
 
     client = StoryClient.newClient(config);

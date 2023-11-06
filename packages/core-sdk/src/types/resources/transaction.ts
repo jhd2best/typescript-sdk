@@ -1,4 +1,4 @@
-import { ResourceType } from "../../enums/ResourceType";
+import {ResourceType} from "../../enums/ResourceType";
 
 /**
  * Core data model for transactions.

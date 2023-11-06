@@ -1,0 +1,225 @@
+import {getAddress} from "viem";
+
+export const relationshipModuleAbi = [
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "address",
+                        "name": "sourceContract",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "sourceId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "destContract",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "destId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "relationshipId",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "ttl",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct IRelationshipModule.RelationshipParams",
+                "name": "params",
+                "type": "tuple"
+            },
+            {
+                "internalType": "bytes",
+                "name": "data",
+                "type": "bytes"
+            }
+        ],
+        "name": "relate",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "address",
+                        "name": "sourceContract",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "sourceId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "destContract",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "destId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "relationshipId",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "ttl",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct IRelationshipModule.RelationshipParams",
+                "name": "params",
+                "type": "tuple"
+            }
+        ],
+        "name": "unrelate",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "address",
+                        "name": "sourceContract",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "sourceId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "destContract",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "destId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "relationshipId",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "ttl",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct IRelationshipModule.RelationshipParams",
+                "name": "params",
+                "type": "tuple"
+            }
+        ],
+        "name": "isRelationshipExpired",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "address",
+                        "name": "sourceContract",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "sourceId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "destContract",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "destId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "relationshipId",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "ttl",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct IRelationshipModule.RelationshipParams",
+                "name": "params",
+                "type": "tuple"
+            }
+        ],
+        "name": "areTheyRelated",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            }
+        ],
+        "name": "getRelationshipId",
+        "outputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    }
+] as const
+
+export const relationshipModuleConfig = {
+    abi: relationshipModuleAbi,
+    address:getAddress(process.env.RELATIONSHIP_MODULE_CONTRACT || process.env.NEXT_PUBLIC_RELATIONSHIP_MODULE_CONTRACT || "")
+}

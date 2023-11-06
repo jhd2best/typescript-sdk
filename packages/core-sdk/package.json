@@ -26,15 +26,14 @@
     "lint:fix": "pnpm run lint --fix",
     "lint": "eslint ./src",
     "tsc": "tsc --noEmit",
-    "abigen": "typechain --target ethers-v5 './src/abi/**/*.json' --out-dir ./src/abi/generated"
+    "abigen": "ts-node-script scripts/abi-helper.ts"
   },
   "license": "MIT",
   "dependencies": {
-    "@ethersproject/abi": "^5.7.0",
-    "@ethersproject/providers": "^5.7.2",
+    "abitype": "^0.10.2",
     "axios": "^1.5.1",
     "dotenv": "^16.3.1",
-    "ethers": "^5.7.2"
+    "viem": "^1.18.4"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",
@@ -44,7 +43,6 @@
     "@story-protocol/eslint-config": "workspace:*",
     "@story-protocol/prettier-config": "workspace:*",
     "@story-protocol/tsconfig": "workspace:*",
-    "@typechain/ethers-v5": "^11.1.1",
     "@types/chai": "^4.3.6",
     "@types/chai-as-promised": "^7.1.6",
     "@types/mocha": "^10.0.2",
@@ -54,7 +52,6 @@
     "chai": "^4.3.10",
     "chai-as-promised": "^7.1.1",
     "eslint": "^8.50.0",
-    "ethers": "^5.7.2",
     "mocha": "^10.2.0",
     "prettier": "^2.8.8",
     "sinon": "^16.0.0",

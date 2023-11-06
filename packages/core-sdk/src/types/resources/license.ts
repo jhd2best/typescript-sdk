@@ -1,5 +1,3 @@
-import { BytesLike } from "ethers";
-
 /**
  * Represents the core data model for a License, containing essential information.
  *
@@ -59,7 +57,7 @@ export type CreateLicenseRequestOptions = {
   isSublicensable?: boolean; // Indicates whether sublicensing is allowed for the license. Defaults to `false` if not specified.
   terms?: {
     processor: string; // The terms processor's name or identifier.
-    data: BytesLike | string; // Data associated with the license's terms.
+    data: Uint8Array | string; // Data associated with the license's terms.
   };
 };
 
@@ -69,8 +67,8 @@ export type CreateLicenseRequestOptions = {
  * @public
  */
 export type CreateLicenseRequest = {
-  franchiseId: string; // Identifier of the franchise where the license will be created.
-  ipAssetId: string; // Identifier of the IP asset for which the license is being created.
+  franchiseId: bigint; // Identifier of the franchise where the license will be created.
+  ipAssetId: bigint; // Identifier of the IP asset for which the license is being created.
   licenseURI: string; // URI (Uniform Resource Identifier) of the license's terms and conditions on Arweave.
   options?: CreateLicenseRequestOptions; // Additional options for creating the license, if needed.
 };
