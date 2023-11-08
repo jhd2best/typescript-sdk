@@ -83,6 +83,7 @@ export class LicenseClient extends LicenseReadOnlyClient {
             data: toHex(options?.terms?.data || defaults._terms.data),
           },
         ],
+        account: this.wallet.account,
       });
 
       return {

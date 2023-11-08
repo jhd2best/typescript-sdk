@@ -61,13 +61,14 @@ export class StoryClient {
 
     if (!isReadOnly) {
       const account = (this.config as StoryConfig).account;
-      if (!this.wallet) {
-        throw new Error("wallet is null");
+      if (!account) {
+        throw new Error("account is null");
       }
 
       this.wallet = createWalletClient({
-        chain: mainnet,
-        transport: http("https://cloudflare-eth.com"),
+        chain: (this.config as StoryConfig).chain || mainnet,
+        transport:
+            (this.config as StoryConfig).transport || http("https://cloudflare-eth.com"),
         account: account,
       });
     } else {

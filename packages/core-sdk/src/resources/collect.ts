@@ -35,6 +35,7 @@ export class CollectClient extends CollectReadOnlyClient {
             collectNFTData: "0x",
           },
         ],
+        account: this.wallet.account,
       });
 
       return {

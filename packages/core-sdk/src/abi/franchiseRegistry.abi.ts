@@ -1,5 +1,10 @@
 import { getAddress, parseAbi } from "viem";
 import { formatAbi } from "abitype";
+import * as dotenv from "dotenv";
+
+if (typeof process !== "undefined") {
+  dotenv.config();
+}
 
 export const franchiseRegistryAbi = [
   {
@@ -70,8 +75,6 @@ export const franchiseRegistryAbi = [
 ] as const;
 
 export const franchiseRegistryReadable = formatAbi(franchiseRegistryAbi);
-
-console.log("AAA:",process.env)
 
 export const franchiseRegistryConfig = {
   abi: parseAbi(franchiseRegistryReadable),

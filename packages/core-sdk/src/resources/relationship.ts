@@ -98,6 +98,7 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
         ...relationshipModuleConfig,
         functionName: "relate",
         args: [params, mockRelationshipData],
+        account: this.wallet.account,
       });
 
       return {
@@ -144,6 +145,7 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
         ...relationshipModuleConfig,
         functionName: "unrelate",
         args: [params],
+        account: this.wallet.account,
       });
 
       return {

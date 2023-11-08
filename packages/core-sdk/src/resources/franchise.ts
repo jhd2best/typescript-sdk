@@ -47,6 +47,7 @@ export class FranchiseClient extends FranchiseReadOnlyClient {
             tokenURI: tokenURI,
           },
         ],
+        account: this.wallet.account,
       });
 
       return {
@@ -92,6 +93,7 @@ export class FranchiseClient extends FranchiseReadOnlyClient {
             revoker: "0xF33f05489d9708C2CA97944F2007d4E741D4DEe7",
           },
         ],
+        account: this.wallet.account,
       });
 
       return {
