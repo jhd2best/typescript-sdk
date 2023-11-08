@@ -4,5 +4,12 @@
     "resolveJsonModule": true,
     "module": "CommonJS"
   },
-  "include": ["./test"]
+  "include": ["./test"],
+  "exclude": [
+    "./test/ipAsset.test.ts",
+    "./test/ipAssetReadOnly.test.ts",
+    "./test/license.test.ts",
+    "./test/licenseReadOnly.test.ts",
+    "./test/relationship.test.ts",
+  ]
 }

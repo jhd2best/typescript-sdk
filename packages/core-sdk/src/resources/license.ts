@@ -1,12 +1,12 @@
-import {AxiosInstance} from "axios";
+import { AxiosInstance } from "axios";
+import { Address, getAddress, PublicClient, toHex, WalletClient } from "viem";
 
-import {CreateLicenseRequest, CreateLicenseResponse} from "../types/resources/license";
-import {handleError} from "../utils/errors";
-import {LicenseReadOnlyClient} from "./licenseReadOnly";
-import {Address, getAddress, PublicClient, toHex, WalletClient} from "viem";
-import {franchiseRegistryConfig} from "../abi/franchiseRegistry.abi";
-import {ipAssetRegistryConfigMaker} from "../abi/ipAssetRegistry.abi";
-import {AddressZero} from "../constants/addresses";
+import { CreateLicenseRequest, CreateLicenseResponse } from "../types/resources/license";
+import { handleError } from "../utils/errors";
+import { LicenseReadOnlyClient } from "./licenseReadOnly";
+import { franchiseRegistryConfig } from "../abi/franchiseRegistry.abi";
+import { ipAssetRegistryConfigMaker } from "../abi/ipAssetRegistry.abi";
+import { AddressZero } from "../constants/addresses";
 
 /**
  * A class representing License operations.
@@ -14,9 +14,9 @@ import {AddressZero} from "../constants/addresses";
  * @public
  */
 export class LicenseClient extends LicenseReadOnlyClient {
-  protected readonly wallet : WalletClient;
+  protected readonly wallet: WalletClient;
 
-  constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet : WalletClient) {
+  constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet: WalletClient) {
     super(httpClient, rpcClient);
     this.wallet = wallet;
   }
@@ -50,23 +50,23 @@ export class LicenseClient extends LicenseReadOnlyClient {
       const { franchiseId, ipAssetId, licenseURI, options } = request;
 
       // Get Wallet address from Signer
-      const walletAddress: Address = this.wallet.account!!.address;
+      const walletAddress: Address = this.wallet.account!.address;
 
       // Get IPAssetRegistry Contract Address
       const ipAssetRegistryAddress = await this.rpcClient.readContract({
         ...franchiseRegistryConfig,
         functionName: "ipAssetRegistryForId",
-        args: [franchiseId]
-      })
+        args: [franchiseId],
+      });
 
       // Get parent license Id
       const parentLicenseId = await this.rpcClient.readContract({
         ...ipAssetRegistryConfigMaker(ipAssetRegistryAddress),
         functionName: "getLicenseIdByTokenId",
-        args: [ipAssetId, options?.isCommercial || defaults._commercial ]
-      })
+        args: [ipAssetId, options?.isCommercial || defaults._commercial],
+      });
 
-      const {request: call} = await this.rpcClient.simulateContract({
+      const { request: call } = await this.rpcClient.simulateContract({
         ...ipAssetRegistryConfigMaker(ipAssetRegistryAddress),
         functionName: "createLicense",
         args: [
@@ -81,9 +81,9 @@ export class LicenseClient extends LicenseReadOnlyClient {
           {
             processor: getAddress(options?.terms?.processor || defaults._terms.processor),
             data: toHex(options?.terms?.data || defaults._terms.data),
-          }
-        ]
-      })
+          },
+        ],
+      });
 
       return {
         txHash: await this.wallet.writeContract(call),

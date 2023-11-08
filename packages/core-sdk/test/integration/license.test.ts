@@ -1,9 +1,10 @@
 import chai, { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { StoryClient, StoryConfig, Environment } from "../../src/index";
-import { ethers } from "ethers";
 import * as dotenv from "dotenv";
 import { Client } from "../../src/types/client";
+import { privateKeyToAccount } from "viem/accounts";
+import { getAddress } from "viem";
 
 dotenv.config();
 chai.use(chaiAsPromised);
@@ -12,12 +13,9 @@ describe("License Functions", () => {
   let client: Client;
 
   before(async function () {
-    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_PROVIDER_URL);
-    const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY as string, provider);
-
     const config: StoryConfig = {
       environment: Environment.TEST,
-      account: wallet,
+      account: privateKeyToAccount(getAddress(process.env.WALLET_PRIVATE_KEY || "")),
     };
 
     client = StoryClient.newClient(config);
@@ -27,8 +25,8 @@ describe("License Functions", () => {
     it("should create a license", async () => {
       await expect(
         client.license.create({
-          franchiseId: "66",
-          ipAssetId: "1000000000001",
+          franchiseId: 78n,
+          ipAssetId: 1000000000001n,
           licenseURI:
             "https://project-nova-content-staging.s3.us-east-2.amazonaws.com/kbw/movie.png",
         }),

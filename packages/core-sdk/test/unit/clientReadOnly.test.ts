@@ -2,9 +2,8 @@ import { expect } from "chai";
 import { StoryClient } from "../../src/client";
 import { Environment } from "../../src/enums/Environment";
 import { ReadOnlyClient } from "../../src/types/client";
-import {fantom} from "viem/chains";
-import {getAddress, http} from "viem";
-import {privateKeyToAccount} from "viem/accounts";
+import { fantom } from "viem/chains";
+import { http } from "viem";
 
 describe("Test StoryReadOnlyClient", function () {
   describe("Test constructor", function () {

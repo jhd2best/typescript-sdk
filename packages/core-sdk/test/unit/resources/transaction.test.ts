@@ -5,16 +5,21 @@ import chai from "chai";
 import { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { TransactionClient } from "../../../src/resources/transaction";
+import {PublicClient, WalletClient} from "viem";
 
 chai.use(chaiAsPromised);
 
 describe("Test TransactionClient", function () {
   let transactionClient: TransactionClient;
   let axiosMock: AxiosInstance;
+  let rpcMock: PublicClient;
+  let walletMock: WalletClient;
 
   beforeEach(function () {
     axiosMock = createMock<AxiosInstance>();
-    transactionClient = new TransactionClient(axiosMock);
+    rpcMock = createMock<PublicClient>();
+    walletMock = createMock<WalletClient>();
+    transactionClient = new TransactionClient(axiosMock,rpcMock,walletMock);
   });
 
   afterEach(function () {

@@ -1,4 +1,5 @@
-import {AxiosInstance, AxiosResponse} from "axios";
+import { AxiosInstance, AxiosResponse } from "axios";
+import { PublicClient } from "viem";
 
 import {
   GetLicenseRequest,
@@ -6,9 +7,8 @@ import {
   ListLicenseRequest,
   ListLicenseResponse,
 } from "../types/resources/license";
-import {handleError} from "../utils/errors";
-import {isIntegerString} from "../utils/utils";
-import {PublicClient} from "viem";
+import { handleError } from "../utils/errors";
+import { isIntegerString } from "../utils/utils";
 
 /**
  * A class representing License operations.
@@ -19,10 +19,7 @@ export class LicenseReadOnlyClient {
   protected readonly httpClient: AxiosInstance;
   protected readonly rpcClient: PublicClient;
 
-  constructor(
-      httpClient: AxiosInstance,
-      rpcClient: PublicClient,
-  ) {
+  constructor(httpClient: AxiosInstance, rpcClient: PublicClient) {
     this.httpClient = httpClient;
     this.rpcClient = rpcClient;
   }

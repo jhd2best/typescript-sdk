@@ -1,19 +1,19 @@
-import {AxiosInstance} from "axios";
+import { AxiosInstance } from "axios";
+import { Address, getAddress, PublicClient, WalletClient } from "viem";
 
-import {CreateIpAssetRequest, CreateIpAssetResponse} from "../types/resources/ipAsset";
-import {handleError} from "../utils/errors";
-import {IPAssetReadOnlyClient} from "./ipAssetReadOnly";
-import {Address, getAddress, PublicClient, WalletClient} from "viem";
-import {franchiseRegistryConfig} from "../abi/franchiseRegistry.abi";
-import {ipAssetRegistryConfigMaker} from "../abi/ipAssetRegistry.abi";
+import { CreateIpAssetRequest, CreateIpAssetResponse } from "../types/resources/ipAsset";
+import { handleError } from "../utils/errors";
+import { IPAssetReadOnlyClient } from "./ipAssetReadOnly";
+import { franchiseRegistryConfig } from "../abi/franchiseRegistry.abi";
+import { ipAssetRegistryConfigMaker } from "../abi/ipAssetRegistry.abi";
 
 /**
  * IpAssetClient allows you to create, view, and list IP Assets on Story Protocol.
  */
 export class IPAssetClient extends IPAssetReadOnlyClient {
-  protected readonly wallet : WalletClient;
+  protected readonly wallet: WalletClient;
 
-  constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet : WalletClient) {
+  constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet: WalletClient) {
     super(httpClient, rpcClient);
     this.wallet = wallet;
   }
@@ -23,12 +23,12 @@ export class IPAssetClient extends IPAssetReadOnlyClient {
    *
    * @returns the response object that contains the requested ipAssetRegistry.
    */
-  private async getRegistryAddress(franchiseId: bigint):Promise<Address> {
+  private async getRegistryAddress(franchiseId: bigint): Promise<Address> {
     try {
       return await this.rpcClient.readContract({
         ...franchiseRegistryConfig,
         functionName: "ipAssetRegistryForId",
-        args: [franchiseId]
+        args: [franchiseId],
       });
     } catch (error) {
       handleError(error, "Failed to retrieve IP Asset Registry");
@@ -46,7 +46,7 @@ export class IPAssetClient extends IPAssetReadOnlyClient {
       const franchiseId = request.franchiseId;
       const ipAssetRegistryAddress = await this.getRegistryAddress(franchiseId);
 
-      const {request: call} = await this.rpcClient.simulateContract({
+      const { request: call } = await this.rpcClient.simulateContract({
         ...ipAssetRegistryConfigMaker(ipAssetRegistryAddress),
         functionName: "createIPAsset",
         args: [
@@ -56,8 +56,8 @@ export class IPAssetClient extends IPAssetReadOnlyClient {
           request.mediaUrl,
           getAddress(request.to),
           request.parentIpAssetId,
-        ]
-      })
+        ],
+      });
 
       return {
         txHash: await this.wallet.writeContract(call),

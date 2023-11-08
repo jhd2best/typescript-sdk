@@ -1,23 +1,23 @@
 import { AxiosInstance } from "axios";
 import * as sinon from "sinon";
-import { CollectModule } from "../../../src/abi/generated/CollectModule";
 import { createMock } from "../testUtils";
 import chai from "chai";
 import { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { CollectReadOnlyClient } from "../../../src/resources/collectReadOnly";
+import { PublicClient } from "viem";
 
 chai.use(chaiAsPromised);
 
 describe("Test CollectReadOnlyClient", function () {
   let collectClient: CollectReadOnlyClient;
   let axiosMock: AxiosInstance;
-  let collectModuleMock: CollectModule;
+  let rpcMock: PublicClient;
 
   beforeEach(function () {
     axiosMock = createMock<AxiosInstance>();
-    collectModuleMock = createMock<CollectModule>();
-    collectClient = new CollectReadOnlyClient(axiosMock, collectModuleMock);
+    rpcMock = createMock<PublicClient>();
+    collectClient = new CollectReadOnlyClient(axiosMock, rpcMock);
   });
 
   afterEach(function () {

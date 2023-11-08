@@ -1,9 +1,10 @@
 import chai, { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { StoryClient, StoryConfig, Environment } from "../../src/index";
-import { ethers } from "ethers";
 import * as dotenv from "dotenv";
 import { Client } from "../../src/types/client";
+import { privateKeyToAccount } from "viem/accounts";
+import { getAddress } from "viem";
 
 dotenv.config();
 chai.use(chaiAsPromised);
@@ -13,22 +14,19 @@ describe("Relationship Functions", () => {
   // TODO: need actually IPAsset data for it to work
   const mockRequest = {
     sourceIPAsset: {
-      franchiseId: "66",
-      ipAssetId: "1000000000001",
+      franchiseId: 66n,
+      ipAssetId: 1000000000001n,
     },
     destIPAsset: {
-      franchiseId: "66",
-      ipAssetId: "1",
+      franchiseId: 66n,
+      ipAssetId: 1n,
     },
   };
 
   before(function () {
-    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_PROVIDER_URL);
-    const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY as string, provider);
-
     const config: StoryConfig = {
       environment: Environment.TEST,
-      account: wallet,
+      account: privateKeyToAccount(getAddress(process.env.WALLET_PRIVATE_KEY || "")),
     };
 
     client = StoryClient.newClient(config);

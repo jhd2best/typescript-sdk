@@ -3,9 +3,9 @@ import chai, { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { StoryClient, StoryConfig, Environment } from "../../src/index";
 import * as dotenv from "dotenv";
-import {fantom} from "viem/chains";
-import {getAddress, http} from "viem";
-import {privateKeyToAccount} from "viem/accounts";
+import { fantom } from "viem/chains";
+import { getAddress, http } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
 
 dotenv.config();
 chai.use(chaiAsPromised);
@@ -18,7 +18,7 @@ describe("Franchise Functions", () => {
       environment: Environment.TEST,
       chain: fantom,
       transport: http(process.env.RPC_PROVIDER_URL),
-      account: privateKeyToAccount(getAddress(process.env.WALLET_PRIVATE_KEY || '')),
+      account: privateKeyToAccount(getAddress(process.env.WALLET_PRIVATE_KEY || "")),
     };
 
     client = StoryClient.newClient(config);

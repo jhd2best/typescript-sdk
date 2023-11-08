@@ -5,9 +5,9 @@ import * as dotenv from "dotenv";
 import { IPAssetType } from "../../src/enums/IPAssetType";
 
 import { Client } from "../../src/types/client";
-import {fantom} from "viem/chains";
-import {getAddress, http} from "viem";
-import {privateKeyToAccount} from "viem/accounts";
+import { fantom } from "viem/chains";
+import { getAddress, http } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
 
 dotenv.config();
 chai.use(chaiAsPromised);
@@ -16,12 +16,12 @@ describe("IP Asset Functions", () => {
   let client: Client;
 
   before(function () {
-      const config: StoryConfig = {
-          environment: Environment.TEST,
-          chain: fantom,
-          transport: http(process.env.RPC_PROVIDER_URL),
-          account: privateKeyToAccount(getAddress(process.env.WALLET_PRIVATE_KEY || '')),
-      };
+    const config: StoryConfig = {
+      environment: Environment.TEST,
+      chain: fantom,
+      transport: http(process.env.RPC_PROVIDER_URL),
+      account: privateKeyToAccount(getAddress(process.env.WALLET_PRIVATE_KEY || "")),
+    };
 
     client = StoryClient.newClient(config);
   });

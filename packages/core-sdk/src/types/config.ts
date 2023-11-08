@@ -1,5 +1,6 @@
-import {Environment} from "../enums/Environment";
-import {Account, Chain, Transport} from "viem";
+import { Account, Chain, Transport } from "viem";
+
+import { Environment } from "../enums/Environment";
 
 /**
  * Configuration for the SDK Client.

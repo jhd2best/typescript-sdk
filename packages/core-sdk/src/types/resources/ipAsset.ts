@@ -1,4 +1,4 @@
-import {IPAssetType} from "../../enums/IPAssetType";
+import { IPAssetType } from "../../enums/IPAssetType";
 
 /**
  * Core data model for IP Asset.

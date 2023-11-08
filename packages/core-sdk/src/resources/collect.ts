@@ -1,15 +1,15 @@
-import {AxiosInstance} from "axios";
+import { AxiosInstance } from "axios";
+import { getAddress, PublicClient, WalletClient } from "viem";
 
-import {CollectIPAssetRequest, CollectIPAssetResponse} from "../types/resources/collect";
-import {handleError} from "../utils/errors";
-import {CollectReadOnlyClient} from "./collectReadOnly";
-import {getAddress, PublicClient, WalletClient} from "viem";
-import {collectModuleConfig} from "../abi/collectModule.abi";
+import { CollectIPAssetRequest, CollectIPAssetResponse } from "../types/resources/collect";
+import { handleError } from "../utils/errors";
+import { CollectReadOnlyClient } from "./collectReadOnly";
+import { collectModuleConfig } from "../abi/collectModule.abi";
 
 export class CollectClient extends CollectReadOnlyClient {
-  protected readonly wallet : WalletClient;
+  protected readonly wallet: WalletClient;
 
-  constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet : WalletClient) {
+  constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet: WalletClient) {
     super(httpClient, rpcClient);
     this.wallet = wallet;
   }
@@ -22,7 +22,7 @@ export class CollectClient extends CollectReadOnlyClient {
    */
   public async collect(request: CollectIPAssetRequest): Promise<CollectIPAssetResponse> {
     try {
-      const {request: call} = await this.rpcClient.simulateContract({
+      const { request: call } = await this.rpcClient.simulateContract({
         ...collectModuleConfig,
         functionName: "collect",
         args: [
@@ -33,9 +33,9 @@ export class CollectClient extends CollectReadOnlyClient {
             collectData: "0x",
             collectNFTInitData: "0x",
             collectNFTData: "0x",
-          }
-        ]
-      })
+          },
+        ],
+      });
 
       return {
         txHash: await this.wallet.writeContract(call),

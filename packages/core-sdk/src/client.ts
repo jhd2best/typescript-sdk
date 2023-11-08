@@ -1,24 +1,24 @@
-import axios, {AxiosInstance} from "axios";
-import {createPublicClient, createWalletClient, http, PublicClient, WalletClient} from 'viem'
-import {mainnet} from 'viem/chains'
+import axios, { AxiosInstance } from "axios";
+import { createPublicClient, createWalletClient, http, PublicClient, WalletClient } from "viem";
+import { mainnet } from "viem/chains";
 import * as dotenv from "dotenv";
 
-import {StoryConfig, StoryReadOnlyConfig} from "./types/config";
-import {Environment} from "./enums/Environment";
-import {FranchiseClient} from "./resources/franchise";
-import {FranchiseReadOnlyClient} from "./resources/franchiseReadOnly";
-import {RelationshipClient} from "./resources/relationship";
-import {RelationshipReadOnlyClient} from "./resources/relationshipReadOnly";
-import {IPAssetClient} from "./resources/ipAsset";
-import {IPAssetReadOnlyClient} from "./resources/ipAssetReadOnly";
-import {LicenseClient} from "./resources/license";
-import {LicenseReadOnlyClient} from "./resources/licenseReadOnly";
-import {TransactionClient} from "./resources/transaction";
-import {TransactionReadOnlyClient} from "./resources/transactionReadOnly";
-import {CollectClient} from "./resources/collect";
-import {CollectReadOnlyClient} from "./resources/collectReadOnly";
-import {HTTP_TIMEOUT} from "./constants/http";
-import {Client, ReadOnlyClient} from "./types/client";
+import { StoryConfig, StoryReadOnlyConfig } from "./types/config";
+import { Environment } from "./enums/Environment";
+import { FranchiseClient } from "./resources/franchise";
+import { FranchiseReadOnlyClient } from "./resources/franchiseReadOnly";
+import { RelationshipClient } from "./resources/relationship";
+import { RelationshipReadOnlyClient } from "./resources/relationshipReadOnly";
+import { IPAssetClient } from "./resources/ipAsset";
+import { IPAssetReadOnlyClient } from "./resources/ipAssetReadOnly";
+import { LicenseClient } from "./resources/license";
+import { LicenseReadOnlyClient } from "./resources/licenseReadOnly";
+import { TransactionClient } from "./resources/transaction";
+import { TransactionReadOnlyClient } from "./resources/transactionReadOnly";
+import { CollectClient } from "./resources/collect";
+import { CollectReadOnlyClient } from "./resources/collectReadOnly";
+import { HTTP_TIMEOUT } from "./constants/http";
+import { Client, ReadOnlyClient } from "./types/client";
 
 if (typeof process !== "undefined") {
   dotenv.config();
@@ -31,7 +31,7 @@ export class StoryClient {
   private readonly httpClient: AxiosInstance;
   private readonly isReadOnly: boolean = false;
   private readonly rpcClient: PublicClient;
-  private readonly wallet ?: WalletClient;
+  private readonly wallet?: WalletClient;
 
   private _franchise: FranchiseClient | FranchiseReadOnlyClient | null = null;
   private _license: LicenseClient | LicenseReadOnlyClient | null = null;
@@ -54,21 +54,24 @@ export class StoryClient {
 
     const clientConfig = {
       chain: (this.config as StoryReadOnlyConfig).chain || mainnet,
-      transport: (this.config as StoryReadOnlyConfig).transport || http('https://cloudflare-eth.com')
-    }
-    this.rpcClient = createPublicClient(clientConfig)
+      transport:
+        (this.config as StoryReadOnlyConfig).transport || http("https://cloudflare-eth.com"),
+    };
+    this.rpcClient = createPublicClient(clientConfig);
 
-    if (!isReadOnly){
-      const account = (this.config as StoryConfig).account
-      if (!this.wallet) throw new Error("wallet is null")
+    if (!isReadOnly) {
+      const account = (this.config as StoryConfig).account;
+      if (!this.wallet) {
+        throw new Error("wallet is null");
+      }
 
       this.wallet = createWalletClient({
         chain: mainnet,
-        transport: http('https://cloudflare-eth.com'),
-        account: account
-      })
+        transport: http("https://cloudflare-eth.com"),
+        account: account,
+      });
     } else {
-      this.rpcClient = createPublicClient(clientConfig)
+      this.rpcClient = createPublicClient(clientConfig);
     }
 
     this.httpClient = axios.create({
@@ -99,7 +102,7 @@ export class StoryClient {
     if (this.isReadOnly) {
       this._franchise = new FranchiseReadOnlyClient(this.httpClient, this.rpcClient);
     } else {
-      this._franchise = new FranchiseClient(this.httpClient, this.rpcClient, this.wallet!!);
+      this._franchise = new FranchiseClient(this.httpClient, this.rpcClient, this.wallet!);
     }
   }
 
@@ -107,7 +110,7 @@ export class StoryClient {
     if (this.isReadOnly) {
       this._relationship = new RelationshipReadOnlyClient(this.httpClient, this.rpcClient);
     } else {
-      this._relationship = new RelationshipClient(this.httpClient, this.rpcClient, this.wallet!!);
+      this._relationship = new RelationshipClient(this.httpClient, this.rpcClient, this.wallet!);
     }
   }
 
@@ -115,7 +118,7 @@ export class StoryClient {
     if (this.isReadOnly) {
       this._ipAsset = new IPAssetReadOnlyClient(this.httpClient, this.rpcClient);
     } else {
-      this._ipAsset = new IPAssetClient(this.httpClient, this.rpcClient, this.wallet!!);
+      this._ipAsset = new IPAssetClient(this.httpClient, this.rpcClient, this.wallet!);
     }
   }
 
@@ -123,7 +126,7 @@ export class StoryClient {
     if (this.isReadOnly) {
       this._license = new LicenseReadOnlyClient(this.httpClient, this.rpcClient);
     } else {
-      this._license = new LicenseClient(this.httpClient, this.rpcClient, this.wallet!!);
+      this._license = new LicenseClient(this.httpClient, this.rpcClient, this.wallet!);
     }
   }
 
@@ -131,7 +134,7 @@ export class StoryClient {
     if (this.isReadOnly) {
       this._transaction = new TransactionReadOnlyClient(this.httpClient, this.rpcClient);
     } else {
-      this._transaction = new TransactionClient(this.httpClient, this.rpcClient, this.wallet!!);
+      this._transaction = new TransactionClient(this.httpClient, this.rpcClient, this.wallet!);
     }
   }
 
@@ -139,7 +142,7 @@ export class StoryClient {
     if (this.isReadOnly) {
       this._collect = new CollectReadOnlyClient(this.httpClient, this.rpcClient);
     } else {
-      this._collect = new CollectClient(this.httpClient, this.rpcClient, this.wallet!!);
+      this._collect = new CollectClient(this.httpClient, this.rpcClient, this.wallet!);
     }
   }
 

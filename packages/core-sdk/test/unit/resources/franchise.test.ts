@@ -1,24 +1,24 @@
 import chai, { expect } from "chai";
 import { FranchiseClient } from "../../../src/resources/franchise";
-import { FranchiseRegistry, LicensingModule } from "../../../src/abi/generated";
 import { AxiosInstance } from "axios";
 import { createMock } from "../testUtils";
 import * as sinon from "sinon";
 import chaiAsPromised from "chai-as-promised";
+import {PublicClient, WalletClient} from "viem";
 
 chai.use(chaiAsPromised);
 
 describe(`Test FranchiseClient`, function () {
   let franchise: FranchiseClient;
   let axiosMock: AxiosInstance;
-  let franchiseRegistryMock: FranchiseRegistry;
-  let licenseModuleMock: LicensingModule;
+  let rpcMock: PublicClient;
+  let walletMock: WalletClient;
 
   beforeEach(function () {
     axiosMock = createMock<AxiosInstance>();
-    franchiseRegistryMock = createMock<FranchiseRegistry>();
-    licenseModuleMock = createMock<LicensingModule>();
-    franchise = new FranchiseClient(axiosMock, franchiseRegistryMock, licenseModuleMock);
+    rpcMock = createMock<PublicClient>();
+    walletMock = createMock<WalletClient>();
+    franchise = new FranchiseClient(axiosMock, rpcMock, walletMock);
   });
 
   afterEach(function () {
@@ -27,9 +27,9 @@ describe(`Test FranchiseClient`, function () {
 
   describe("Test franchise.create", async function () {
     it("should not throw error when creating a franchise", async function () {
-      franchiseRegistryMock.registerFranchise = sinon.stub().returns({
-        hash: "0x129f7dd802200f096221dd89d5b086e4bd3ad6eafb378a0c75e3b04fc375f997",
-      });
+      rpcMock.simulateContract = sinon.stub().resolves({request: null})
+      walletMock.writeContract = sinon.stub().resolves("0x129f7dd802200f096221dd89d5b086e4bd3ad6eafb378a0c75e3b04fc375f997");
+
       await expect(
         franchise.create({
           franchiseName: "Star War",
@@ -41,7 +41,7 @@ describe(`Test FranchiseClient`, function () {
     });
 
     it("should throw error when registerFranchise reverts", async function () {
-      franchiseRegistryMock.registerFranchise = sinon.stub().rejects(new Error("revert"));
+      rpcMock.simulateContract = sinon.stub().rejects(new Error("revert"));
       await expect(
         franchise.create({
           franchiseName: "Star War",
@@ -80,19 +80,22 @@ describe(`Test FranchiseClient`, function () {
 
   describe("Test franchise.configure", async function () {
     it("should not throw error when configuring a franchise", async function () {
-      licenseModuleMock.configureFranchiseLicensing = sinon.stub().returns({});
+      rpcMock.simulateContract = sinon.stub().resolves({request: null})
+      walletMock.writeContract = sinon.stub().resolves({});
+
       await expect(
         franchise.configure({
-          franchiseId: "66",
+          franchiseId: 66n,
         }),
       ).not.to.be.rejected;
     });
 
     it("should throw error when configureFranchiseLicensing reverts", async function () {
-      licenseModuleMock.configureFranchiseLicensing = sinon.stub().rejects(new Error("revert"));
+      rpcMock.simulateContract = sinon.stub().rejects(new Error("revert"));
+
       await expect(
         franchise.configure({
-          franchiseId: "66",
+          franchiseId: 66n,
         }),
       ).to.be.rejectedWith("revert");
     });
