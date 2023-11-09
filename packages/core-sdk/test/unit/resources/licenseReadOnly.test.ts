@@ -1,23 +1,22 @@
 import chai, { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
-
 import { LicenseReadOnlyClient } from "../../../src/resources/licenseReadOnly";
-import { FranchiseRegistry } from "../../../src/abi/generated/FranchiseRegistry";
 import { AxiosInstance } from "axios";
 import { createMock } from "../testUtils";
 import * as sinon from "sinon";
+import {PublicClient} from "viem";
 
 chai.use(chaiAsPromised);
 
 describe("Test LicenseReadOnlyClient", function () {
   let licenseClient: LicenseReadOnlyClient;
   let axiosMock: AxiosInstance;
-  let franchiseRegistryMock: FranchiseRegistry;
+  let rpcMock: PublicClient;
 
   beforeEach(function () {
     axiosMock = createMock<AxiosInstance>();
-    franchiseRegistryMock = createMock<FranchiseRegistry>();
-    licenseClient = new LicenseReadOnlyClient(axiosMock, franchiseRegistryMock);
+    rpcMock = createMock<PublicClient>();
+    licenseClient = new LicenseReadOnlyClient(axiosMock, rpcMock);
   });
 
   afterEach(function () {

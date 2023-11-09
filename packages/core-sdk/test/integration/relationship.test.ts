@@ -4,7 +4,8 @@ import { StoryClient, StoryConfig, Environment } from "../../src/index";
 import * as dotenv from "dotenv";
 import { Client } from "../../src/types/client";
 import { privateKeyToAccount } from "viem/accounts";
-import { getAddress } from "viem";
+import {getAddress, Hex, http} from "viem";
+import {goerli} from "viem/chains";
 
 dotenv.config();
 chai.use(chaiAsPromised);
@@ -26,7 +27,9 @@ describe("Relationship Functions", () => {
   before(function () {
     const config: StoryConfig = {
       environment: Environment.TEST,
-      account: privateKeyToAccount(getAddress(process.env.WALLET_PRIVATE_KEY || "")),
+      chain: goerli,
+      transport: http(process.env.RPC_PROVIDER_URL),
+      account: privateKeyToAccount((process.env.WALLET_PRIVATE_KEY || "0x") as Hex),
     };
 
     client = StoryClient.newClient(config);

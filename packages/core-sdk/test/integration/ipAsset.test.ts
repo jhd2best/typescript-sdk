@@ -1,12 +1,12 @@
 import chai, { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
-import { StoryClient, StoryConfig, Environment } from "../../src/index";
+import { StoryClient, StoryConfig, Environment } from "../../src";
 import * as dotenv from "dotenv";
 import { IPAssetType } from "../../src/enums/IPAssetType";
 
 import { Client } from "../../src/types/client";
-import { fantom } from "viem/chains";
-import { getAddress, http } from "viem";
+import { goerli } from "viem/chains";
+import {getAddress, Hex, http} from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
 dotenv.config();
@@ -18,9 +18,9 @@ describe("IP Asset Functions", () => {
   before(function () {
     const config: StoryConfig = {
       environment: Environment.TEST,
-      chain: fantom,
+      chain: goerli,
       transport: http(process.env.RPC_PROVIDER_URL),
-      account: privateKeyToAccount(getAddress(process.env.WALLET_PRIVATE_KEY || "")),
+      account: privateKeyToAccount((process.env.WALLET_PRIVATE_KEY || "0x") as Hex),
     };
 
     client = StoryClient.newClient(config);

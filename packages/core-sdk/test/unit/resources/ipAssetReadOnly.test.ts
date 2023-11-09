@@ -1,28 +1,24 @@
 import { expect } from "chai";
-
 import { IPAssetReadOnlyClient } from "../../../src/resources/ipAssetReadOnly";
-import { FranchiseRegistry } from "../../../src/abi/generated/FranchiseRegistry";
 import { AxiosInstance } from "axios";
 import { createMock } from "../testUtils";
 import * as sinon from "sinon";
-import { IPAssetType } from "../../../src/enums/IPAssetType";
+import { IPAssetType } from "../../../src";
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
-import { IpAssetRegistry } from "../../../src/abi/generated";
+import {PublicClient} from "viem";
 
 chai.use(chaiAsPromised);
 
 describe("Test IpAssetReadOnlyClient", function () {
   let ipAssetClient: IPAssetReadOnlyClient;
   let axiosMock: AxiosInstance;
-  let franchiseRegistryMock: FranchiseRegistry;
-  let ipAssetRegistryMock: IpAssetRegistry;
+  let rpcMock: PublicClient;
 
   beforeEach(function () {
     axiosMock = createMock<AxiosInstance>();
-    franchiseRegistryMock = createMock<FranchiseRegistry>();
-    ipAssetClient = new IPAssetReadOnlyClient(axiosMock, franchiseRegistryMock);
-    ipAssetRegistryMock = createMock<IpAssetRegistry>();
+    rpcMock = createMock<PublicClient>();
+    ipAssetClient = new IPAssetReadOnlyClient(axiosMock, rpcMock);
   });
 
   afterEach(function () {
@@ -64,7 +60,7 @@ describe("Test IpAssetReadOnlyClient", function () {
 
     it("should throw error if asset id is invalid", async function () {
       try {
-        ipAssetClient.get({ ipAssetId: "Bogus ID", franchiseId: "78" });
+        await ipAssetClient.get({ipAssetId: "Bogus ID", franchiseId: "78"});
         expect.fail(`Function should not get here, it should throw an error `);
       } catch (error) {
         // function is expected to throw.

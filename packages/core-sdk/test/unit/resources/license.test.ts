@@ -4,18 +4,26 @@ import { LicenseClient } from "../../../src/resources/license";
 import { AxiosInstance } from "axios";
 import { createMock } from "../testUtils";
 import * as sinon from "sinon";
+import {PublicClient, WalletClient} from "viem";
+import {AddressZero} from "../../../src/constants/addresses";
 
 chai.use(chaiAsPromised);
 
 describe("Test LicenseClient", function () {
   let licenseClient: LicenseClient;
   let axiosMock: AxiosInstance;
-  let franchiseRegistryMock: FranchiseRegistry;
+  let rpcMock: PublicClient;
+  let walletMock: WalletClient;
 
   beforeEach(function () {
     axiosMock = createMock<AxiosInstance>();
-    franchiseRegistryMock = createMock<FranchiseRegistry>();
-    licenseClient = new LicenseClient(axiosMock, Wallet.createRandom(), franchiseRegistryMock);
+    rpcMock = createMock<PublicClient>();
+    walletMock = createMock<WalletClient>({
+      account : {
+        address: AddressZero
+      }
+    });
+    licenseClient = new LicenseClient(axiosMock, rpcMock, walletMock);
   });
 
   afterEach(function () {
@@ -25,22 +33,12 @@ describe("Test LicenseClient", function () {
   describe("Test license.create", async function () {
     it("should not throw an error when creating a license", async function () {
       try {
-        franchiseRegistryMock.ipAssetRegistryForId = sinon
-          .stub()
-          .returns("0xIpAssetRegistryAddress");
+        rpcMock.readContract = sinon.stub()
+            .onFirstCall().resolves(AddressZero)
+            .onSecondCall().resolves(111n)
+        rpcMock.simulateContract = sinon.stub().resolves({request: null})
+        walletMock.writeContract = sinon.stub().resolves("0xHashValue");
 
-        const getLicenseIdByTokenIdStub = sinon.stub();
-        getLicenseIdByTokenIdStub.returns("999");
-
-        const createLicenseStub = sinon.stub();
-        createLicenseStub.returns({
-          hash: "0xHashValue",
-        });
-
-        IpAssetRegistry__factory.connect = sinon.stub().returns({
-          getLicenseIdByTokenId: getLicenseIdByTokenIdStub,
-          createLicense: createLicenseStub,
-        } as any);
 
         const franchiseId = 123n;
         const ipAssetId = 456n;
@@ -51,12 +49,12 @@ describe("Test LicenseClient", function () {
           ipAssetId,
           licenseURI,
           options: {
-            ownerAddress: "0xOwnerAddress",
-            revoker: "0xRevokerAddress",
+            ownerAddress: "0x8e3B91c90561523312f32B49DAAc4AD15293De7F",
+            revoker: "0x8e3B91c90561523312f32B49DAAc4AD15293De7F",
             isCommercial: true,
             isSublicensable: true,
             terms: {
-              processor: "ProcessorName",
+              processor: AddressZero,
               data: "0xabcdef",
             },
           },
@@ -69,16 +67,11 @@ describe("Test LicenseClient", function () {
     });
 
     it("should throw an error", async function () {
-      franchiseRegistryMock.ipAssetRegistryForId = sinon.stub().returns("0xIpAssetRegistryAddress");
-      const getLicenseIdByTokenIdStub = sinon.stub();
-      getLicenseIdByTokenIdStub.returns("999");
-
-      const createLicenseStub = sinon.stub().rejects(new Error("revert"));
-
-      IpAssetRegistry__factory.connect = sinon.stub().returns({
-        getLicenseIdByTokenId: getLicenseIdByTokenIdStub,
-        createLicense: createLicenseStub,
-      } as any);
+      rpcMock.readContract = sinon.stub()
+          .onFirstCall().resolves(AddressZero)
+          .onSecondCall().resolves(111n)
+      rpcMock.simulateContract = sinon.stub().resolves({request: null})
+      walletMock.writeContract = sinon.stub().rejects(new Error("revert"));
 
       const franchiseId = 123n;
       const ipAssetId = 456n;
