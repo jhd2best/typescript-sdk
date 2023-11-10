@@ -40,13 +40,13 @@ export type GetIpAssetResponse = {
  * @public
  */
 export type CreateIpAssetRequest = {
-  franchiseId: bigint;
+  franchiseId: string;
   ipAssetType: IPAssetType;
   ipAssetName: string;
   description: string;
   mediaUrl: string;
   to: string;
-  parentIpAssetId: bigint;
+  parentIpAssetId: string;
 };
 
 /**

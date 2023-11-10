@@ -4,8 +4,8 @@
  * @public
  */
 export type IPAssetId = {
-  franchiseId: bigint;
-  ipAssetId: bigint;
+  franchiseId: string;
+  ipAssetId: string;
 };
 /**
  * Request type for relationship.relate method.
@@ -15,7 +15,7 @@ export type IPAssetId = {
 export type RelationshipRelateRequest = {
   sourceIPAsset: IPAssetId;
   destIPAsset: IPAssetId;
-  ttl?: bigint;
+  ttl?: string;
 };
 /**
  * Response type for relationship.relate method.
@@ -34,7 +34,7 @@ export type RelationshipRelateResponse = {
 export type RelationshipUnrelateRequest = {
   sourceIPAsset: IPAssetId;
   destIPAsset: IPAssetId;
-  ttl?: bigint;
+  ttl?: string;
 };
 
 /**
@@ -53,7 +53,7 @@ export type RelationshipUnrelateResponse = {
 export type RelationshipIsRelationshipExpiredRequest = {
   sourceIPAsset: IPAssetId;
   destIPAsset: IPAssetId;
-  ttl?: bigint;
+  ttl?: string;
 };
 /**
  * Response type for relationship.isRelationshipExpired method.
@@ -71,7 +71,7 @@ export type RelationshipIsRelationshipExpiredResponse = {
 export type RelationshipIsRelatedRequest = {
   sourceIPAsset: IPAssetId;
   destIPAsset: IPAssetId;
-  ttl?: bigint;
+  ttl?: string;
 };
 /**
  * Response type for relationship.isRelated method.

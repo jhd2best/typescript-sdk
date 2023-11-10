@@ -7,6 +7,7 @@ import { LicenseReadOnlyClient } from "./licenseReadOnly";
 import { franchiseRegistryConfig } from "../abi/franchiseRegistry.abi";
 import { ipAssetRegistryConfigMaker } from "../abi/ipAssetRegistry.abi";
 import { AddressZero } from "../constants/addresses";
+import {parseToBigInt} from "../utils/utils";
 
 /**
  * A class representing License operations.
@@ -14,7 +15,7 @@ import { AddressZero } from "../constants/addresses";
  * @public
  */
 export class LicenseClient extends LicenseReadOnlyClient {
-  protected readonly wallet: WalletClient;
+  private readonly wallet: WalletClient;
 
   constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet: WalletClient) {
     super(httpClient, rpcClient);
@@ -56,21 +57,21 @@ export class LicenseClient extends LicenseReadOnlyClient {
       const ipAssetRegistryAddress = await this.rpcClient.readContract({
         ...franchiseRegistryConfig,
         functionName: "ipAssetRegistryForId",
-        args: [franchiseId],
+        args: [parseToBigInt(franchiseId)],
       });
 
       // Get parent license Id
       const parentLicenseId = await this.rpcClient.readContract({
         ...ipAssetRegistryConfigMaker(ipAssetRegistryAddress),
         functionName: "getLicenseIdByTokenId",
-        args: [ipAssetId, options?.isCommercial || defaults._commercial],
+        args: [parseToBigInt(ipAssetId), options?.isCommercial || defaults._commercial],
       });
 
       const { request: call } = await this.rpcClient.simulateContract({
         ...ipAssetRegistryConfigMaker(ipAssetRegistryAddress),
         functionName: "createLicense",
         args: [
-          ipAssetId,
+          parseToBigInt(ipAssetId),
           parentLicenseId,
           walletAddress,
           licenseURI,

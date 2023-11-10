@@ -5,9 +5,10 @@ import { CollectIPAssetRequest, CollectIPAssetResponse } from "../types/resource
 import { handleError } from "../utils/errors";
 import { CollectReadOnlyClient } from "./collectReadOnly";
 import { collectModuleConfig } from "../abi/collectModule.abi";
+import {parseToBigInt} from "../utils/utils";
 
 export class CollectClient extends CollectReadOnlyClient {
-  protected readonly wallet: WalletClient;
+  private readonly wallet: WalletClient;
 
   constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet: WalletClient) {
     super(httpClient, rpcClient);
@@ -27,8 +28,8 @@ export class CollectClient extends CollectReadOnlyClient {
         functionName: "collect",
         args: [
           {
-            franchiseId: request.franchiseId,
-            ipAssetId: request.ipAssetId,
+            franchiseId: parseToBigInt(request.franchiseId),
+            ipAssetId: parseToBigInt(request.ipAssetId),
             collector: getAddress(request.collector),
             collectData: "0x",
             collectNFTInitData: "0x",

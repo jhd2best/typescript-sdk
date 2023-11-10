@@ -8,7 +8,7 @@ import { TransactionReadOnlyClient } from "./transactionReadOnly";
  * Story Protocol.
  */
 export class TransactionClient extends TransactionReadOnlyClient {
-  protected readonly wallet: WalletClient;
+  private readonly wallet: WalletClient;
 
   constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet: WalletClient) {
     super(httpClient, rpcClient);

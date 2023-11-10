@@ -12,13 +12,14 @@ import { FranchiseReadOnlyClient } from "./franchiseReadOnly";
 import { franchiseRegistryConfig } from "../abi/franchiseRegistry.abi";
 import { licensingModuleConfig } from "../abi/licensingModule.abi";
 import { AddressZero } from "../constants/addresses";
+import {parseToBigInt} from "../utils/utils";
 
 /**
  * FranchiseClient allows you to create, update, view, search franchises on
  * Story Protocol.
  */
 export class FranchiseClient extends FranchiseReadOnlyClient {
-  protected readonly wallet: WalletClient;
+  private readonly wallet: WalletClient;
 
   constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet: WalletClient) {
     super(httpClient, rpcClient);
@@ -70,7 +71,7 @@ export class FranchiseClient extends FranchiseReadOnlyClient {
         ...licensingModuleConfig,
         functionName: "configureFranchiseLicensing",
         args: [
-          request.franchiseId,
+          parseToBigInt(request.franchiseId),
           {
             nonCommercialConfig: {
               canSublicense: true,

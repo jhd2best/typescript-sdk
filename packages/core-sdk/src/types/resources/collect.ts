@@ -15,8 +15,8 @@ export type Collection = {
  * @public
  */
 export type CollectIPAssetRequest = {
-  franchiseId: bigint;
-  ipAssetId: bigint;
+  franchiseId: string;
+  ipAssetId: string;
   collector: string;
 };
 

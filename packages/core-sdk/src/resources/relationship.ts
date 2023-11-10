@@ -15,12 +15,13 @@ import { handleError } from "../utils/errors";
 import { RelationshipReadOnlyClient } from "./relationshipReadOnly";
 import { franchiseRegistryConfig } from "../abi/franchiseRegistry.abi";
 import { relationshipModuleConfig } from "../abi/relationshipModule.abi";
+import {parseToBigInt} from "../utils/utils";
 
 /**
  * Client for managing relationships.
  */
 export class RelationshipClient extends RelationshipReadOnlyClient {
-  protected readonly wallet: WalletClient;
+  private readonly wallet: WalletClient;
 
   constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet: WalletClient) {
     super(httpClient, rpcClient);
@@ -34,8 +35,8 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
    * @returns An object containing the source and destination IP registry addresses.
    */
   private async getRegistryAddresses(
-    sourceFranchiseId: bigint,
-    destFranchiseId: bigint,
+    sourceFranchiseId: string,
+    destFranchiseId: string,
   ): Promise<{
     sourceIpRegistryAddress: Address;
     destIpRegistryAddress: Address;
@@ -44,13 +45,13 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
       const sourceIpRegistryAddress = await this.rpcClient.readContract({
         ...franchiseRegistryConfig,
         functionName: "ipAssetRegistryForId",
-        args: [sourceFranchiseId],
+        args: [parseToBigInt(sourceFranchiseId)],
       });
 
       const destIpRegistryAddress = await this.rpcClient.readContract({
         ...franchiseRegistryConfig,
         functionName: "ipAssetRegistryForId",
-        args: [destFranchiseId],
+        args: [parseToBigInt(destFranchiseId)],
       });
 
       return {
@@ -87,9 +88,9 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
 
       const params = {
         sourceContract: sourceIpRegistryAddress,
-        sourceId: sourceIPAsset.ipAssetId,
+        sourceId: parseToBigInt(sourceIPAsset.ipAssetId),
         destContract: destIpRegistryAddress,
-        destId: destIPAsset.ipAssetId,
+        destId: parseToBigInt(destIPAsset.ipAssetId),
         relationshipId,
         ttl: 0n,
       };
@@ -134,9 +135,9 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
 
       const params = {
         sourceContract: sourceIpRegistryAddress,
-        sourceId: sourceIPAsset.ipAssetId,
+        sourceId: parseToBigInt(sourceIPAsset.ipAssetId),
         destContract: destIpRegistryAddress,
-        destId: destIPAsset.ipAssetId,
+        destId: parseToBigInt(destIPAsset.ipAssetId),
         relationshipId,
         ttl: 0n,
       };
@@ -181,9 +182,9 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
 
       const params = {
         sourceContract: sourceIpRegistryAddress,
-        sourceId: sourceIPAsset.ipAssetId,
+        sourceId: parseToBigInt(sourceIPAsset.ipAssetId),
         destContract: destIpRegistryAddress,
-        destId: destIPAsset.ipAssetId,
+        destId: parseToBigInt(destIPAsset.ipAssetId),
         relationshipId,
         ttl: 0n,
       };
@@ -227,9 +228,9 @@ export class RelationshipClient extends RelationshipReadOnlyClient {
 
       const params = {
         sourceContract: sourceIpRegistryAddress,
-        sourceId: sourceIPAsset.ipAssetId,
+        sourceId: parseToBigInt(sourceIPAsset.ipAssetId),
         destContract: destIpRegistryAddress,
-        destId: destIPAsset.ipAssetId,
+        destId: parseToBigInt(destIPAsset.ipAssetId),
         relationshipId,
         ttl: 0n,
       };

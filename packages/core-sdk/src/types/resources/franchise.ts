@@ -62,7 +62,7 @@ export type ListFranchiseResponse = {
  * @public
  */
 export type ConfigureFranchiseRequest = {
-  franchiseId: bigint;
+  franchiseId: string;
 };
 /**
  * Response type for franchise.configure method.

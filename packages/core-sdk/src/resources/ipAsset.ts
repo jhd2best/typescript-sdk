@@ -6,12 +6,13 @@ import { handleError } from "../utils/errors";
 import { IPAssetReadOnlyClient } from "./ipAssetReadOnly";
 import { franchiseRegistryConfig } from "../abi/franchiseRegistry.abi";
 import { ipAssetRegistryConfigMaker } from "../abi/ipAssetRegistry.abi";
+import {parseToBigInt} from "../utils/utils";
 
 /**
  * IpAssetClient allows you to create, view, and list IP Assets on Story Protocol.
  */
 export class IPAssetClient extends IPAssetReadOnlyClient {
-  protected readonly wallet: WalletClient;
+  private readonly wallet: WalletClient;
 
   constructor(httpClient: AxiosInstance, rpcClient: PublicClient, wallet: WalletClient) {
     super(httpClient, rpcClient);
@@ -23,12 +24,12 @@ export class IPAssetClient extends IPAssetReadOnlyClient {
    *
    * @returns the response object that contains the requested ipAssetRegistry.
    */
-  private async getRegistryAddress(franchiseId: bigint): Promise<Address> {
+  private async getRegistryAddress(franchiseId: string): Promise<Address> {
     try {
       return await this.rpcClient.readContract({
         ...franchiseRegistryConfig,
         functionName: "ipAssetRegistryForId",
-        args: [franchiseId],
+        args: [parseToBigInt(franchiseId)],
       });
     } catch (error) {
       handleError(error, "Failed to retrieve IP Asset Registry");
@@ -55,7 +56,7 @@ export class IPAssetClient extends IPAssetReadOnlyClient {
           request.description,
           request.mediaUrl,
           getAddress(request.to),
-          request.parentIpAssetId,
+          parseToBigInt(request.parentIpAssetId),
         ],
       });
 

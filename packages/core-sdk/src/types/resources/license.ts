@@ -67,8 +67,8 @@ export type CreateLicenseRequestOptions = {
  * @public
  */
 export type CreateLicenseRequest = {
-  franchiseId: bigint; // Identifier of the franchise where the license will be created.
-  ipAssetId: bigint; // Identifier of the IP asset for which the license is being created.
+  franchiseId: string; // Identifier of the franchise where the license will be created.
+  ipAssetId: string; // Identifier of the IP asset for which the license is being created.
   licenseURI: string; // URI (Uniform Resource Identifier) of the license's terms and conditions on Arweave.
   options?: CreateLicenseRequestOptions; // Additional options for creating the license, if needed.
 };

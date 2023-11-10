@@ -53,9 +53,8 @@ export class StoryClient {
     this.isReadOnly = isReadOnly;
 
     const clientConfig = {
-      chain: (this.config as StoryReadOnlyConfig).chain || mainnet,
-      transport:
-        (this.config as StoryReadOnlyConfig).transport || http("https://cloudflare-eth.com"),
+      chain: this.config.chain || mainnet,
+      transport: this.config.transport || http("https://cloudflare-eth.com"),
     };
     this.rpcClient = createPublicClient(clientConfig);
 
@@ -66,9 +65,8 @@ export class StoryClient {
       }
 
       this.wallet = createWalletClient({
-        chain: (this.config as StoryConfig).chain || mainnet,
-        transport:
-            (this.config as StoryConfig).transport || http("https://cloudflare-eth.com"),
+        chain: this.config.chain || mainnet,
+        transport:this.config.transport || http("https://cloudflare-eth.com"),
         account: account,
       });
     } else {
