@@ -30,13 +30,13 @@ describe("IP Asset Functions", () => {
     it("should not throw error when creating an IP Asset", async () => {
       await expect(
         client.ipAsset.create({
-          franchiseId: 78n,
+          franchiseId: "78",
           ipAssetType: IPAssetType.CHARACTER,
           ipAssetName: "Darth Vader",
           description: "fake desc",
           mediaUrl: "/",
           to: "0xf398C12A45Bc409b6C652E25bb0a3e702492A4ab",
-          parentIpAssetId: 0n,
+          parentIpAssetId: "0",
         }),
       ).to.not.be.rejected;
     });

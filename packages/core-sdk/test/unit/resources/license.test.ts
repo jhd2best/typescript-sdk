@@ -35,13 +35,13 @@ describe("Test LicenseClient", function () {
       try {
         rpcMock.readContract = sinon.stub()
             .onFirstCall().resolves(AddressZero)
-            .onSecondCall().resolves(111n)
+            .onSecondCall().resolves("111")
         rpcMock.simulateContract = sinon.stub().resolves({request: null})
         walletMock.writeContract = sinon.stub().resolves("0xHashValue");
 
 
-        const franchiseId = 123n;
-        const ipAssetId = 456n;
+        const franchiseId = "123";
+        const ipAssetId = "456";
         const licenseURI = "https://example.com/license";
 
         const response = await licenseClient.create({
@@ -69,12 +69,12 @@ describe("Test LicenseClient", function () {
     it("should throw an error", async function () {
       rpcMock.readContract = sinon.stub()
           .onFirstCall().resolves(AddressZero)
-          .onSecondCall().resolves(111n)
+          .onSecondCall().resolves("111")
       rpcMock.simulateContract = sinon.stub().resolves({request: null})
       walletMock.writeContract = sinon.stub().rejects(new Error("revert"));
 
-      const franchiseId = 123n;
-      const ipAssetId = 456n;
+      const franchiseId = "123";
+      const ipAssetId = "456";
       const licenseURI = "https://example.com/license";
 
       await expect(

@@ -33,8 +33,8 @@ describe("Test CollectClient", function () {
       walletMock.writeContract = sinon.stub().resolves("0x129f7dd802200f096221dd89d5b086e4bd3ad6eafb378a0c75e3b04fc375f997");
 
       const response = await collectClient.collect({
-        franchiseId: 6n,
-        ipAssetId: 1n,
+        franchiseId: "6",
+        ipAssetId: "1",
         collector: "0x1234567890123456789012345678901234567890",
       });
 
@@ -48,8 +48,8 @@ describe("Test CollectClient", function () {
 
       await expect(
         collectClient.collect({
-          franchiseId: 0n,
-          ipAssetId: 0n,
+          franchiseId: "0",
+          ipAssetId: "0",
           collector: "0x0000000000000000000000000000000000000000",
         }),
       ).to.be.rejectedWith("revert");

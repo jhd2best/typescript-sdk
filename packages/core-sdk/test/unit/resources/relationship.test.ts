@@ -37,14 +37,14 @@ describe("Test RelationshipClient", function () {
   describe("test getRegistryAddresses", () => {
     const mockRelateRequest = {
       sourceIPAsset: {
-        franchiseId: 6n,
-        ipAssetId: 1n,
+        franchiseId: "6",
+        ipAssetId: "1",
       },
       destIPAsset: {
-        franchiseId: 6n,
-        ipAssetId: 2n,
+        franchiseId: "6",
+        ipAssetId: "2",
       },
-      ttl: 123n,
+      ttl: "123",
     };
 
     it("should resolve with the registry addresses", async () => {
@@ -92,14 +92,14 @@ describe("Test RelationshipClient", function () {
   describe("Test RelationshipClient.relate", function () {
     const mockRelateRequest = {
       sourceIPAsset: {
-        franchiseId: 6n,
-        ipAssetId: 1n,
+        franchiseId: "6",
+        ipAssetId: "1",
       },
       destIPAsset: {
-        franchiseId: 6n,
-        ipAssetId: 2n,
+        franchiseId: "6",
+        ipAssetId: "2",
       },
-      ttl: 123n,
+      ttl: "123",
     };
 
     const mockResponse = {
@@ -150,14 +150,14 @@ describe("Test RelationshipClient", function () {
   describe("Test RelationshipClient.unrelate", function () {
     const mockUnrelateRequest = {
       sourceIPAsset: {
-        franchiseId: 6n,
-        ipAssetId: 1n,
+        franchiseId: "6",
+        ipAssetId: "1",
       },
       destIPAsset: {
-        franchiseId: 6n,
-        ipAssetId: 2n,
+        franchiseId: "6",
+        ipAssetId: "2",
       },
-      ttl: 123n,
+      ttl: "123",
     };
     const mockResponse = {
       hash: "transactionHash",
@@ -203,14 +203,14 @@ describe("Test RelationshipClient", function () {
   describe("Test RelationshipClient.isRelationshipExpired", function () {
     const mockIsRelationshipExpiredRequest = {
       sourceIPAsset: {
-        franchiseId: 6n,
-        ipAssetId: 1n,
+        franchiseId: "6",
+        ipAssetId: "1",
       },
       destIPAsset: {
-        franchiseId: 6n,
-        ipAssetId: 2n,
+        franchiseId: "6",
+        ipAssetId: "2",
       },
-      ttl: 123n,
+      ttl: "123",
     };
 
     it("should check if relationship is expired and return result", async function () {
@@ -255,14 +255,14 @@ describe("Test RelationshipClient", function () {
   describe("Test RelationshipClient.isRelated", function () {
     const mockIsRelatedRequest = {
       sourceIPAsset: {
-        franchiseId: 6n,
-        ipAssetId: 1n,
+        franchiseId: "6",
+        ipAssetId: "1",
       },
       destIPAsset: {
-        franchiseId: 6n,
-        ipAssetId: 2n,
+        franchiseId: "6",
+        ipAssetId: "2",
       },
-      ttl: 123n,
+      ttl: "123",
     };
 
     it("should check if two entities are related and return result", async function () {

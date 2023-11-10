@@ -85,7 +85,7 @@ describe(`Test FranchiseClient`, function () {
 
       await expect(
         franchise.configure({
-          franchiseId: 66n,
+          franchiseId: "66",
         }),
       ).not.to.be.rejected;
     });
@@ -95,7 +95,7 @@ describe(`Test FranchiseClient`, function () {
 
       await expect(
         franchise.configure({
-          franchiseId: 66n,
+          franchiseId: "66",
         }),
       ).to.be.rejectedWith("revert");
     });

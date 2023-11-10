@@ -15,12 +15,12 @@ describe("Relationship Functions", () => {
   // TODO: need actually IPAsset data for it to work
   const mockRequest = {
     sourceIPAsset: {
-      franchiseId: 66n,
-      ipAssetId: 1000000000001n,
+      franchiseId: "66",
+      ipAssetId: "1000000000001",
     },
     destIPAsset: {
-      franchiseId: 66n,
-      ipAssetId: 1n,
+      franchiseId: "66",
+      ipAssetId: "1",
     },
   };
 

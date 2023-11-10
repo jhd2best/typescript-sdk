@@ -49,7 +49,7 @@ describe("Franchise Functions", () => {
     it("should not throw error when configuring a franchise", async () => {
       await expect(
         client.franchise.configure({
-          franchiseId: 78n,
+          franchiseId: "78",
         }),
       ).to.not.be.rejected;
     });

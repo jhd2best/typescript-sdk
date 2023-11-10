@@ -28,8 +28,8 @@ describe("License Functions", () => {
     it("should create a license", async () => {
       await expect(
         client.license.create({
-          franchiseId: 78n,
-          ipAssetId: 1000000000001n,
+          franchiseId: "78",
+          ipAssetId: "1000000000001",
           licenseURI:
             "https://project-nova-content-staging.s3.us-east-2.amazonaws.com/kbw/movie.png",
         }),

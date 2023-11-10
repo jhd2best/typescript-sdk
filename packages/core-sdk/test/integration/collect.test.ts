@@ -27,8 +27,8 @@ describe("Collect client integration tests", () => {
   describe("Collect an IP Asset", async function () {
     it("should return txHash when the collect transaction is successful", async () => {
       const response = await client.collect.collect({
-        franchiseId: 78n,
-        ipAssetId: 1n,
+        franchiseId: "78",
+        ipAssetId: "1",
         collector: "0xe17aA3E4BFe9812b64354e5275A211216F1dee2a",
       });
 

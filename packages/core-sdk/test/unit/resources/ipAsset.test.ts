@@ -36,13 +36,13 @@ describe("Test IpAssetClient", function () {
         walletMock.writeContract = sinon.stub().resolves("0x129f7dd802200f096221dd89d5b086e4bd3ad6eafb378a0c75e3b04fc375f997");
 
         await ipAssetClient.create({
-          franchiseId: 78n,
+          franchiseId: "78",
           ipAssetType: IPAssetType.CHARACTER,
           ipAssetName: "Darth Vader",
           description: "fake desc",
           mediaUrl: "/",
           to: "0x2a5A2cFd49AF297f830A3b6659EA8abdFEF83b7A",
-          parentIpAssetId: 7n,
+          parentIpAssetId: "7",
         });
       } catch (error) {
         expect.fail(`Function should not have thrown any error, but it threw: ${error}`);
@@ -55,13 +55,13 @@ describe("Test IpAssetClient", function () {
       walletMock.writeContract = sinon.stub().resolves("0x129f7dd802200f096221dd89d5b086e4bd3ad6eafb378a0c75e3b04fc375f997");
       await expect(
         ipAssetClient.create({
-          franchiseId: 78n,
+          franchiseId: "78",
           ipAssetType: IPAssetType.CHARACTER,
           ipAssetName: "Darth Vader",
           description: "fake desc",
           mediaUrl: "/",
           to: "0x2a5A2cFd49AF297f830A3b6659EA8abdFEF83b7A",
-          parentIpAssetId: 7n,
+          parentIpAssetId: "7",
         }),
       ).to.be.rejectedWith("http 500");
     });
@@ -70,13 +70,13 @@ describe("Test IpAssetClient", function () {
       try {
         expect(
           ipAssetClient.create({
-            franchiseId: "invalid ID" as any as bigint,
+            franchiseId: "invalid ID",
             ipAssetType: IPAssetType.CHARACTER,
             ipAssetName: "Darth Vader",
             description: "fake desc",
             mediaUrl: "/",
             to: "0x2a5A2cFd49AF297f830A3b6659EA8abdFEF83b7A",
-            parentIpAssetId: 7n,
+            parentIpAssetId: "7",
           }),
         );
       } catch (error) {
