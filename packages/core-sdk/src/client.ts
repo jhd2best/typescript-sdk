@@ -65,12 +65,9 @@ export class StoryClient {
       }
 
       this.wallet = createWalletClient({
-        chain: this.config.chain || mainnet,
-        transport:this.config.transport || http("https://cloudflare-eth.com"),
+        ...clientConfig,
         account: account,
       });
-    } else {
-      this.rpcClient = createPublicClient(clientConfig);
     }
 
     this.httpClient = axios.create({
