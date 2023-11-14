@@ -1,3 +1,5 @@
+import {QueryOptions} from "./helpers";
+
 /**
  * Represents the core data model for a License, containing essential information.
  *
@@ -27,21 +29,27 @@ export type GetLicenseRequest = {
  * @public
  */
 export type GetLicenseResponse = {
-  data: License;
-};
-
-export type ListLicenseRequest = {
-  ipAssetId: string;
-  franchiseId: string;
+  license: License
 };
 
 /**
- * Represents the request structure for listing multiple licenses using the `license.list` method.
+ * Represents the request structure for listing multiple licenses using the `franchise.list` method.
+ *
+ * @public
+ */
+export type ListLicenseRequest = {
+  ipOrgId?: string
+  ipAssetId?: string
+  options?: QueryOptions
+};
+
+/**
+ * Represents the response structure for listing multiple licenses using the `license.list` method.
  *
  * @public
  */
 export type ListLicenseResponse = {
-  data: License[]; // An array of licenses to be listed.
+  licenses: License[]
 };
 
 /**

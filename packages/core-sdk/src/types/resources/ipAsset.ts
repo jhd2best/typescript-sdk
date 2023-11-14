@@ -1,4 +1,5 @@
-import { IPAssetType } from "../../enums/IPAssetType";
+import {IPAssetType} from "../../enums/IPAssetType";
+import {QueryOptions, TxOptions} from "./helpers";
 
 /**
  * Core data model for IP Asset.
@@ -6,13 +7,14 @@ import { IPAssetType } from "../../enums/IPAssetType";
  * @public
  */
 export type IPAsset = {
-  ipAssetId: string;
-  franchiseId: string;
-  ipAssetName: string;
-  ipAssetType: IPAssetType;
-  ownerAddress: string;
-  tokenUri: string;
-  txHash: string;
+  id: string
+  type: IPAssetType
+  ipOrgId: string
+  owner: string
+  metadataUrl: string
+  hash?: string
+  data?: string
+  createdAt: string // ISO 8601
 };
 
 /**
@@ -21,8 +23,7 @@ export type IPAsset = {
  * @public
  */
 export type GetIpAssetRequest = {
-  ipAssetId: string;
-  franchiseId: string;
+  ipAssetId: string
 };
 
 /**
@@ -31,7 +32,7 @@ export type GetIpAssetRequest = {
  * @public
  */
 export type GetIpAssetResponse = {
-  data: IPAsset;
+  ipAsset: IPAsset
 };
 
 /**
@@ -40,13 +41,14 @@ export type GetIpAssetResponse = {
  * @public
  */
 export type CreateIpAssetRequest = {
-  franchiseId: string;
-  ipAssetType: IPAssetType;
-  ipAssetName: string;
-  description: string;
-  mediaUrl: string;
-  to: string;
-  parentIpAssetId: string;
+  name: string
+  type: IPAssetType
+  ipOrgId: string
+  owner: string
+  metadataUrl: string
+  hash?: string
+  data?: string
+  txOptions?: TxOptions
 };
 
 /**
@@ -55,7 +57,8 @@ export type CreateIpAssetRequest = {
  * @public
  */
 export type CreateIpAssetResponse = {
-  txHash: string;
+  txHash: string
+  ipAssetId?: string
 };
 
 /**
@@ -64,7 +67,7 @@ export type CreateIpAssetResponse = {
  * @public
  */
 export type ListIpAssetRequest = {
-  franchiseId: string;
+  options?: QueryOptions
 };
 
 /**
@@ -73,5 +76,5 @@ export type ListIpAssetRequest = {
  * @public
  */
 export type ListIpAssetResponse = {
-  data: IPAsset[];
+  ipAssets: IPAsset[]
 };
