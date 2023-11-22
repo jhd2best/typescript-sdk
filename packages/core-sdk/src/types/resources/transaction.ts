@@ -8,14 +8,14 @@ import { QueryOptions } from "../options";
  * @public
  */
 export type Transaction = {
-  id: string
-  txHash: string
-  ipOrgId: string
-  initiator: string
-  resourceId: string
-  resourceType: ResourceType
-  actionType: ActionType
-  createdAt: string // ISO 8601
+  id: string;
+  txHash: string;
+  ipOrgId: string;
+  initiator: string;
+  resourceId: string;
+  resourceType: ResourceType;
+  actionType: ActionType;
+  createdAt: string; // ISO 8601
 };
 
 /**

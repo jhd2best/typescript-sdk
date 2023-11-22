@@ -7,15 +7,15 @@ import { QueryOptions, TxOptions } from "../options";
  * @public
  */
 export type IPAsset = {
-  id: string
-  name: string
-  type: number
-  ipOrgId: string
-  owner: string
-  mediaUrl: string
-  contentHash?: string
-  createdAt: string // ISO 8601
-  txHash: string
+  id: string;
+  name: string;
+  type: number;
+  ipOrgId: string;
+  owner: string;
+  mediaUrl: string;
+  contentHash?: string;
+  createdAt: string; // ISO 8601
+  txHash: string;
 };
 
 /**

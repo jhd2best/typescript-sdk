@@ -49,18 +49,18 @@ describe(`Test IPOrgClient`, function () {
     it("should not throw error when creating a ip Org with ZeroAddress", async function () {
       rpcMock.simulateContract = sinon.stub().resolves({ request: null });
       walletMock.writeContract = sinon
-          .stub()
-          .resolves("0x129f7dd802200f096221dd89d5b086e4bd3ad6eafb378a0c75e3b04fc375f997");
+        .stub()
+        .resolves("0x129f7dd802200f096221dd89d5b086e4bd3ad6eafb378a0c75e3b04fc375f997");
 
       await expect(
-          ipOrgClient.create({
-            name: "Star Wars",
-            symbol: "STAR",
-            ipAssetTypes: [IPAssetType.STORY.toString(), IPAssetType.CHARACTER.toString()],
-            txOptions: {
-              waitForTransaction: false,
-            },
-          }),
+        ipOrgClient.create({
+          name: "Star Wars",
+          symbol: "STAR",
+          ipAssetTypes: [IPAssetType.STORY.toString(), IPAssetType.CHARACTER.toString()],
+          txOptions: {
+            waitForTransaction: false,
+          },
+        }),
       ).not.to.be.rejected;
     });
 

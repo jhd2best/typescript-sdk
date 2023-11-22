@@ -7,12 +7,12 @@ import { QueryOptions } from "../options";
  * @public
  */
 export type Module = {
-  id: string
-  ipOrgId: string
-  moduleKey: string
-  interface?: string
-  preHooks?: Hook[]
-  postHooks?: Hook[]
+  id: string;
+  ipOrgId: string;
+  moduleKey: string;
+  interface?: string;
+  preHooks?: Hook[];
+  postHooks?: Hook[];
 };
 
 /**

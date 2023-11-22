@@ -6,15 +6,15 @@ import { QueryOptions, TxOptions } from "../options";
  * @public
  */
 export type IPOrg = {
-  id: string
-  name: string
-  symbol: string
-  owner: string
-  baseUri?: string
-  contractUri?: string
-  ipAssetTypes: string[]
-  createdAt: string // ISO 8601
-  txHash: string
+  id: string;
+  name: string;
+  symbol: string;
+  owner: string;
+  baseUri?: string;
+  contractUri?: string;
+  ipAssetTypes: string[];
+  createdAt: string; // ISO 8601
+  txHash: string;
 };
 
 /**

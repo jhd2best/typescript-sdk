@@ -10,5 +10,5 @@ export enum ResourceType {
   RELATIONSHIPTYPE,
   MODULE,
   HOOK,
-  DISPUTE
+  DISPUTE,
 }
