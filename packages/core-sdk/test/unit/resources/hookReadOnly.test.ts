@@ -6,7 +6,7 @@ import * as sinon from "sinon";
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { PublicClient } from "viem";
-import {HookType} from "../../../src/enums/HookType";
+import { HookType } from "../../../src/enums/HookType";
 
 chai.use(chaiAsPromised);
 
@@ -45,9 +45,7 @@ describe("Test HookReadOnlyClient", function () {
       });
 
       expect(response.hook.id).to.equal("0xc0f6e387ac0b324ec18eacf22ee7271207dce3d5");
-      expect(response.hook.moduleId).to.equal(
-        "0x091e5f55135155bb8cb5868adb39e5c34eb32cfd",
-      );
+      expect(response.hook.moduleId).to.equal("0x091e5f55135155bb8cb5868adb39e5c34eb32cfd");
     });
 
     it("should throw error", async function () {
@@ -93,9 +91,7 @@ describe("Test HookReadOnlyClient", function () {
       });
 
       expect(response.hooks[0].id).to.equal("0xc0f6e387ac0b324ec18eacf22ee7271207dce3d5");
-      expect(response.hooks[0].moduleId).to.equal(
-        "0x091e5f55135155bb8cb5868adb39e5c34eb32cfd",
-      );
+      expect(response.hooks[0].moduleId).to.equal("0x091e5f55135155bb8cb5868adb39e5c34eb32cfd");
     });
 
     it("should throw error", async function () {

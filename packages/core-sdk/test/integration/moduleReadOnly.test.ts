@@ -1,6 +1,12 @@
 import chai, { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
-import { StoryClient, StoryReadOnlyConfig, Environment,GetModuleRequest, ListModuleRequest } from "../../src";
+import {
+  StoryClient,
+  StoryReadOnlyConfig,
+  Environment,
+  GetModuleRequest,
+  ListModuleRequest,
+} from "../../src";
 import * as dotenv from "dotenv";
 import { ReadOnlyClient } from "../../src/types/client";
 
@@ -49,7 +55,7 @@ describe("Module client integration tests", () => {
           pagination: {
             limit: 1,
             offset: 0,
-          }
+          },
         },
       } as ListModuleRequest;
 
@@ -71,7 +77,7 @@ describe("Module client integration tests", () => {
 
       expect(response).to.have.property("module");
 
-      const module = response.module
+      const module = response.module;
       expect(module).to.have.property("id");
       expect(module).to.have.property("ipOrgId");
       expect(module).to.have.property("moduleKey");

@@ -36,7 +36,7 @@ describe("IP Asset Read Only Functions", () => {
             limit: 10,
             offset: 0,
           },
-        }
+        },
       });
       expect(response).is.not.null;
     });

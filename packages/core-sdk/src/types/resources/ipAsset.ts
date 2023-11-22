@@ -1,4 +1,3 @@
-import { IPAssetType } from "../../enums/IPAssetType";
 import { QueryOptions, TxOptions } from "../options";
 
 /**

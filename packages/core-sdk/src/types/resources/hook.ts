@@ -1,5 +1,4 @@
 import { QueryOptions } from "../options";
-import { HookType } from "../../enums/HookType";
 
 /**
  * Core data model for Hook.

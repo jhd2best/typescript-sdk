@@ -1,6 +1,12 @@
 import chai, { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
-import { StoryClient, StoryReadOnlyConfig, Environment, GetHookRequest, ListHookRequest } from "../../src";
+import {
+  StoryClient,
+  StoryReadOnlyConfig,
+  Environment,
+  GetHookRequest,
+  ListHookRequest,
+} from "../../src";
 import * as dotenv from "dotenv";
 import { ReadOnlyClient } from "../../src/types/client";
 
