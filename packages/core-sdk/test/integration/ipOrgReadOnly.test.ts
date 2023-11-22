@@ -3,7 +3,7 @@ import chaiAsPromised from "chai-as-promised";
 import { StoryClient, StoryReadOnlyConfig, Environment } from "../../src";
 import * as dotenv from "dotenv";
 import { ReadOnlyClient } from "../../src/types/client";
-import {ListIPOrgRequest} from "../../src/types/resources/IPOrg";
+import { ListIPOrgRequest } from "../../src/types/resources/IPOrg";
 
 dotenv.config();
 chai.use(chaiAsPromised);
@@ -33,12 +33,12 @@ describe("IPOrg Read Only Functions", () => {
   describe("List IPOrgs", async function () {
     it("should return a list of ipOrgs successfully upon query", async () => {
       const options = {
-       options: {
-         pagination: {
-           limit: 10,
-           offset: 0,
-         },
-       }
+        options: {
+          pagination: {
+            limit: 10,
+            offset: 0,
+          },
+        },
       } as ListIPOrgRequest;
       const response = await client.ipOrg.list(options);
       expect(response).is.not.null;
@@ -51,7 +51,7 @@ describe("IPOrg Read Only Functions", () => {
             limit: 1,
             offset: 0,
           },
-        }
+        },
       } as ListIPOrgRequest;
       const response = await client.ipOrg.list(options);
 
