@@ -34,7 +34,7 @@ describe(`Test IPOrgClient`, function () {
         .resolves("0x129f7dd802200f096221dd89d5b086e4bd3ad6eafb378a0c75e3b04fc375f997");
 
       await expect(
-        ipOrgClient.register({
+        ipOrgClient.create({
           name: "Star Wars",
           symbol: "STAR",
           owner: "0x4f9693ac46f2c7e2f48dd14d8fe1ab44192cd57d",
@@ -53,7 +53,7 @@ describe(`Test IPOrgClient`, function () {
           .resolves("0x129f7dd802200f096221dd89d5b086e4bd3ad6eafb378a0c75e3b04fc375f997");
 
       await expect(
-          ipOrgClient.register({
+          ipOrgClient.create({
             name: "Star Wars",
             symbol: "STAR",
             ipAssetTypes: [IPAssetType.STORY.toString(), IPAssetType.CHARACTER.toString()],
@@ -86,7 +86,7 @@ describe(`Test IPOrgClient`, function () {
       });
 
       await expect(
-        ipOrgClient.register({
+        ipOrgClient.create({
           name: "Star Wars",
           symbol: "STAR",
           owner: "0x4f9693ac46f2c7e2f48dd14d8fe1ab44192cd57d",
@@ -101,7 +101,7 @@ describe(`Test IPOrgClient`, function () {
     it("should throw error when registerIPOrg reverts", async function () {
       rpcMock.simulateContract = sinon.stub().rejects(new Error("revert"));
       await expect(
-        ipOrgClient.register({
+        ipOrgClient.create({
           name: "Star Wars",
           symbol: "STAR",
           owner: "0x4f9693ac46f2c7e2f48dd14d8fe1ab44192cd57d",
@@ -134,7 +134,7 @@ describe(`Test IPOrgClient`, function () {
         ],
       });
       try {
-        await ipOrgClient.register({
+        await ipOrgClient.create({
           name: "Star Wars",
           symbol: "STAR",
           owner: "0x4f9693ac46f2c7e2f48dd14d8fe1ab44192cd57d",

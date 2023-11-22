@@ -31,7 +31,7 @@ describe("IPOrg Functions", () => {
     it("should not throw error when creating a ipOrg", async () => {
       const waitForTransaction: boolean = true;
       const response = await expect(
-        client.ipOrg.register({
+        client.ipOrg.create({
           name: "Star Wars",
           symbol: "STAR",
           owner: senderAddress,

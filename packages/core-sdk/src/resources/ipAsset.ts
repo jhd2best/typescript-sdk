@@ -1,7 +1,7 @@
 import { AxiosInstance } from "axios";
 import { getAddress, PublicClient, toHex, WalletClient } from "viem";
 
-import { RegisterIpAssetRequest, RegisterIpAssetResponse } from "../types/resources/ipAsset";
+import { CreateIpAssetRequest, CreateIpAssetResponse } from "../types/resources/ipAsset";
 import { handleError } from "../utils/errors";
 import { IPAssetReadOnlyClient } from "./ipAssetReadOnly";
 import { storyProtocolConfig } from "../abi/storyProtocol.abi";
@@ -25,7 +25,7 @@ export class IPAssetClient extends IPAssetReadOnlyClient {
    * @param request - the request object that contains all data needed to create an IP Asset.
    * @returns the response object that contains results from the asset creation.
    */
-  public async register(request: RegisterIpAssetRequest): Promise<RegisterIpAssetResponse> {
+  public async create(request: CreateIpAssetRequest): Promise<CreateIpAssetResponse> {
     try {
       const { request: call } = await this.rpcClient.simulateContract({
         ...storyProtocolConfig,
@@ -36,7 +36,7 @@ export class IPAssetClient extends IPAssetReadOnlyClient {
             owner: getAddress(request.owner),
             name: request.name,
             ipAssetType: parseToBigInt(request.type),
-            hash: toHex(request.hash || "", { size: 32 }),
+            hash: toHex(request.contentHash || "", { size: 32 }),
             mediaUrl: request.mediaUrl || "",
           },
           [],

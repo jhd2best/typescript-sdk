@@ -37,7 +37,7 @@ describe("Test IpAssetClient", function () {
           .stub()
           .resolves("0x129f7dd802200f096221dd89d5b086e4bd3ad6eafb378a0c75e3b04fc375f997");
 
-        await ipAssetClient.register({
+        await ipAssetClient.create({
           name: "The Empire Strikes Back",
           type: IPAssetType.STORY,
           ipOrgId: "0xB32BdE3fBfddAd30a8d824178F00F0adB43DF2e7",
@@ -79,7 +79,7 @@ describe("Test IpAssetClient", function () {
           ],
         });
 
-        const response = await ipAssetClient.register({
+        const response = await ipAssetClient.create({
           name: "The Empire Strikes Back",
           type: IPAssetType.STORY,
           ipOrgId: "0xB32BdE3fBfddAd30a8d824178F00F0adB43DF2e7",
@@ -102,7 +102,7 @@ describe("Test IpAssetClient", function () {
       rpcMock.simulateContract = sinon.stub().resolves({ request: null });
       walletMock.writeContract = sinon.stub().rejects(new Error("http 500"));
       await expect(
-        ipAssetClient.register({
+        ipAssetClient.create({
           name: "The Empire Strikes Back",
           type: IPAssetType.STORY,
           ipOrgId: "0xB32BdE3fBfddAd30a8d824178F00F0adB43DF2e7",
@@ -120,7 +120,7 @@ describe("Test IpAssetClient", function () {
         rpcMock.simulateContract = sinon.stub().rejects();
 
         expect(
-          await ipAssetClient.register({
+          await ipAssetClient.create({
             name: "The Empire Strikes Back",
             type: IPAssetType.STORY,
             ipOrgId: "fake org id",

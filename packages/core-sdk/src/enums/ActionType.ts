@@ -2,8 +2,8 @@
  * @public
  */
 export enum ActionType {
-  CREATE,
-  REGISTER,
-  UNREGISTER,
-  CONFIGURE,
+    UNSPECIFIED,
+    REGISTER,
+    UNREGISTER,
+    CONFIGURE,
 }

@@ -2,6 +2,7 @@
  * @public
  */
 export enum ResourceType {
+  UNSPECIFIED,
   IP_ORG,
   IP_ASSET,
   LICENSE,
@@ -9,5 +10,5 @@ export enum ResourceType {
   RELATIONSHIPTYPE,
   MODULE,
   HOOK,
-  DISPUTE,
+  DISPUTE
 }

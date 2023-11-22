@@ -1,7 +1,7 @@
 import { AxiosInstance } from "axios";
 import { getAddress, PublicClient, WalletClient, zeroAddress } from "viem";
 
-import { RegisterIPOrgRequest, RegisterIPOrgResponse } from "../types/resources/IPOrg";
+import { CreateIPOrgRequest, CreateIPOrgResponse } from "../types/resources/IPOrg";
 import { handleError } from "../utils/errors";
 import { IPOrgReadOnlyClient } from "./ipOrgReadOnly";
 import { storyProtocolConfig } from "../abi/storyProtocol.abi";
@@ -21,12 +21,12 @@ export class IPOrgClient extends IPOrgReadOnlyClient {
   }
 
   /**
-   * Register a IPOrg on Story Protocol based on the specified input IPOrg data.
+   * Create a IPOrg on Story Protocol based on the specified input IPOrg data.
    *
    * @param request - the request object that contains all data needed to create a IPOrg
    * @returns the response object that contains results from the create IPOrg action
    */
-  public async register(request: RegisterIPOrgRequest): Promise<RegisterIPOrgResponse> {
+  public async create(request: CreateIPOrgRequest): Promise<CreateIPOrgResponse> {
     try {
       const { request: call } = await this.rpcClient.simulateContract({
         ...storyProtocolConfig,

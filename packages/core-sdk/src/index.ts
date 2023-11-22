@@ -9,8 +9,8 @@ export type {
   IPOrg,
   GetIPOrgRequest,
   GetIPOrgResponse,
-  RegisterIPOrgRequest,
-  RegisterIPOrgResponse,
+  CreateIPOrgRequest,
+  CreateIPOrgResponse,
   ListIPOrgResponse,
 } from "./types/resources/IPOrg";
 
@@ -18,8 +18,8 @@ export type {
   IPAsset,
   GetIpAssetRequest,
   GetIpAssetResponse,
-  RegisterIpAssetRequest,
-  RegisterIpAssetResponse,
+  CreateIpAssetRequest,
+  CreateIpAssetResponse,
   ListIpAssetRequest,
   ListIpAssetResponse,
 } from "./types/resources/ipAsset";
