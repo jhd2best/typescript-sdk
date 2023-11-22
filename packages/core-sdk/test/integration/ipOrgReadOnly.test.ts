@@ -41,5 +41,18 @@ describe("IPOrg Read Only Functions", () => {
       const response = await client.ipOrg.list(options);
       expect(response).is.not.null;
     });
+
+    it("should return a list of ipOrgs with pagination", async () => {
+      const options = {
+        pagination: {
+          limit: 1,
+          offset: 0,
+        },
+      } as QueryOptions;
+      const response = await client.ipOrg.list(options);
+
+      expect(response).is.not.null;
+      expect(response.ipOrgs.length).to.equal(1);
+    });
   });
 });

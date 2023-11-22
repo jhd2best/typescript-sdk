@@ -38,7 +38,23 @@ describe("IP Asset Read Only Functions", () => {
           },
         },
       });
+      console.log(response);
       expect(response).is.not.null;
+    });
+
+    it("should return a list of IP assets whit pagination", async () => {
+      const response = await client.ipAsset.list({
+        ipOrgId: "0xb422E54932c1dae83E78267A4DD2805aa64A8061",
+        options: {
+          pagination: {
+            limit: 1,
+            offset: 0,
+          },
+        },
+      });
+
+      expect(response).is.not.null;
+      expect(response.ipAssets.length).to.equal(1);
     });
   });
 });
