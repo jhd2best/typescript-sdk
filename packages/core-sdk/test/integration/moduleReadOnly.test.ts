@@ -21,15 +21,15 @@ describe("Module client integration tests", () => {
   describe("List Modules", async function () {
     it("should return array of all modules", async () => {
       const req = {
-        // ipOrgId: "0xb422E54932c1dae83E78267A4DD2805aa64A8061",
         options: {
-          limit: 10,
-          offset: 0,
+          pagination: {
+            limit: 10,
+            offset: 0,
+          },
         },
       } as ListModuleRequest;
 
       const response = await client.module.list(req);
-      console.log(response);
 
       expect(response).to.have.property("modules");
       expect(response.modules).to.be.an("array");
@@ -46,8 +46,10 @@ describe("Module client integration tests", () => {
     it("should return array of limited amount of modules", async () => {
       const req = {
         options: {
-          limit: 1,
-          offset: 0,
+          pagination: {
+            limit: 1,
+            offset: 0,
+          }
         },
       } as ListModuleRequest;
 
@@ -66,18 +68,16 @@ describe("Module client integration tests", () => {
       } as GetModuleRequest;
 
       const response = await client.module.get(req);
-      console.log(response);
 
-      // expect(response).to.have.property("modules");
-      // expect(response.modules).to.be.an("array");
-      //
-      // const module1 = response.modules[0];
-      // expect(module1).to.have.property("id");
-      // expect(module1).to.have.property("ipOrgId");
-      // expect(module1).to.have.property("moduleKey");
-      // expect(module1.id).to.be.a("string");
-      // expect(module1.ipOrgId).to.be.a("string");
-      // expect(module1.moduleKey).to.be.a("string");
+      expect(response).to.have.property("module");
+
+      const module = response.module
+      expect(module).to.have.property("id");
+      expect(module).to.have.property("ipOrgId");
+      expect(module).to.have.property("moduleKey");
+      expect(module.id).to.be.a("string");
+      expect(module.ipOrgId).to.be.a("string");
+      expect(module.moduleKey).to.be.a("string");
     });
   });
 });

@@ -7,6 +7,7 @@ import chaiAsPromised from "chai-as-promised";
 import { TransactionClient } from "../../../src/resources/transaction";
 import { PublicClient, WalletClient } from "viem";
 import { ActionType } from "../../../src/enums/ActionType";
+import { ResourceType } from "../../../src";
 
 chai.use(chaiAsPromised);
 
@@ -36,9 +37,9 @@ describe("Test TransactionClient", function () {
             txHash: "0x00a1a14e0193144e1d7024428ee242c44e5cacdbd7458c629d17c6366f6c5cb6",
             ipOrgId: "7",
             resourceId: "1",
-            resourceType: "IPAsset",
+            resourceType: ResourceType.IP_ASSET,
             actionType: ActionType.CREATE,
-            creator: "0x4f9693ac46f2c7e2f48dd14d8fe1ab44192cd57d",
+            initiator: "0x4f9693ac46f2c7e2f48dd14d8fe1ab44192cd57d",
             createdAt: "0001-01-01T00:00:00Z",
           },
         },
@@ -51,10 +52,10 @@ describe("Test TransactionClient", function () {
         "0x00a1a14e0193144e1d7024428ee242c44e5cacdbd7458c629d17c6366f6c5cb6",
       );
       expect(response.transaction.createdAt).to.be.equal("0001-01-01T00:00:00Z");
-      expect(response.transaction.creator).to.be.equal(
+      expect(response.transaction.initiator).to.be.equal(
         "0x4f9693ac46f2c7e2f48dd14d8fe1ab44192cd57d",
       );
-      expect(response.transaction.resourceType).to.be.equal("IPAsset");
+      expect(response.transaction.resourceType).to.be.equal(ResourceType.IP_ASSET);
       expect(response.transaction.resourceId).to.be.equal("1");
       expect(response.transaction.ipOrgId).to.be.equal("7");
     });
@@ -75,9 +76,9 @@ describe("Test TransactionClient", function () {
               txHash: "0x00a1a14e0193144e1d7024428ee242c44e5cacdbd7458c629d17c6366f6c5cb6",
               ipOrgId: "7",
               resourceId: "1",
-              resourceType: "IPAsset",
+              resourceType: ResourceType.IP_ASSET,
               actionType: ActionType.CONFIGURE,
-              creator: "0x4f9693ac46f2c7e2f48dd14d8fe1ab44192cd57d",
+              initiator: "0x4f9693ac46f2c7e2f48dd14d8fe1ab44192cd57d",
               createdAt: "0001-01-01T00:00:00Z",
             },
             {
@@ -87,7 +88,7 @@ describe("Test TransactionClient", function () {
               resourceId: "2",
               resourceType: "License",
               actionType: ActionType.REGISTER,
-              creator: "0xd84316a1b6f40902c17b8177854cdaeb3c957daf",
+              initiator: "0xd84316a1b6f40902c17b8177854cdaeb3c957daf",
               createdAt: "0001-01-01T00:00:00Z",
             },
           ],
@@ -103,8 +104,8 @@ describe("Test TransactionClient", function () {
         "0x00a1a14e0193144e1d7024428ee242c44e5cacdbd7458c629d17c6366f6c5cb6",
       );
       expect(transactions[0].createdAt).to.be.equal("0001-01-01T00:00:00Z");
-      expect(transactions[0].creator).to.be.equal("0x4f9693ac46f2c7e2f48dd14d8fe1ab44192cd57d");
-      expect(transactions[0].resourceType).to.be.equal("IPAsset");
+      expect(transactions[0].initiator).to.be.equal("0x4f9693ac46f2c7e2f48dd14d8fe1ab44192cd57d");
+      expect(transactions[0].resourceType).to.be.equal(ResourceType.IP_ASSET);
       expect(transactions[0].resourceId).to.be.equal("1");
       expect(transactions[0].ipOrgId).to.be.equal("7");
 
@@ -114,7 +115,7 @@ describe("Test TransactionClient", function () {
         "0x00a1a14e0193144e1d7024428ee242c44e5cacdbd7458c629d17c6366f6c5cb6",
       );
       expect(transactions[1].createdAt).to.be.equal("0001-01-01T00:00:00Z");
-      expect(transactions[1].creator).to.be.equal("0xd84316a1b6f40902c17b8177854cdaeb3c957daf");
+      expect(transactions[1].initiator).to.be.equal("0xd84316a1b6f40902c17b8177854cdaeb3c957daf");
       expect(transactions[1].resourceType).to.be.equal("License");
       expect(transactions[1].resourceId).to.be.equal("2");
       expect(transactions[1].ipOrgId).to.be.equal("7");

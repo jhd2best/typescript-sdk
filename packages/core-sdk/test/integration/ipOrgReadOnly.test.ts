@@ -33,8 +33,10 @@ describe("IPOrg Read Only Functions", () => {
   describe("List IPOrgs", async function () {
     it("should return a list of ipOrgs successfully upon query", async () => {
       const options = {
-        limit: 10,
-        offset: 0,
+        pagination: {
+          limit: 10,
+          offset: 0,
+        },
       } as QueryOptions;
       const response = await client.ipOrg.list(options);
       expect(response).is.not.null;
